@@ -1,0 +1,43 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Environment variables — НІКОЛИ не комітити
+.env
+.env.local
+.env.development
+.env.development.local
+.env.test.local
+.env.production
+.env.production.local
+apps/backend/.env
+apps/backend/.env.production
+apps/frontend/.env.local
+apps/frontend/.env.production.local
+
+# Build outputs
+apps/backend/dist/
+apps/frontend/.next/
+apps/frontend/out/
+
+# Uploads — зберігати на сервері, не в репо
+apps/backend/uploads/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# TypeScript
+*.tsbuildinfo

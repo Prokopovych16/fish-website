@@ -1,0 +1,29 @@
+{
+  "name": "fish-shop",
+  "version": "1.0.0",
+  "description": "E-commerce platform for ФОП Валігура - fish and seafood products",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm run dev --workspace=apps/backend",
+    "dev:frontend": "npm run dev --workspace=apps/frontend",
+    "build": "npm run build --workspaces",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "npm run start:prod --workspace=apps/backend",
+    "start:frontend": "npm run start --workspace=apps/frontend",
+    "db:migrate": "npm run migrate:dev --workspace=apps/backend",
+    "db:seed": "npm run seed --workspace=apps/backend",
+    "db:studio": "npm run studio --workspace=apps/backend",
+    "prisma": "npm run prisma --workspace=apps/backend"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.2.2"
+  }
+}
