@@ -21,10 +21,11 @@ module.exports = {
       name: 'fish-frontend',
       cwd: './apps/frontend',
       script: 'node_modules/.bin/next',
-      args: 'start -p 3000',
+      // 3000 зайнятий іншим сайтом на сервері (fish-erp), тому фронтенд на 3100
+      args: 'start -p 3100',
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3000,
+        PORT: 3100,
       },
       instances: 1,
       exec_mode: 'fork',
