@@ -12,6 +12,8 @@ export type CartItem = {
   image: string | null;
   quantity: number;
   total: number;
+  /** Залишок на складі (якщо відомий) — щоб не дати вибрати більше */
+  stock?: number;
 };
 
 export type CartSummary = {
@@ -34,6 +36,7 @@ type CartState = {
       price: number;
       oldPrice?: number | null;
       image?: string | null;
+      stock?: number;
     },
     quantity?: number,
   ) => Promise<void>;
@@ -67,6 +70,7 @@ function normalizeApiCart(data: any): CartItem[] {
     image: item.product?.image ?? null,
     quantity: item.quantity,
     total: Number(item.total),
+    stock: item.product?.stock != null ? Number(item.product.stock) : undefined,
   }));
 }
 
@@ -104,11 +108,16 @@ export const useCartStore = create<CartState>()(
         {
           const { items } = get();
           const existing = items.find((i) => i.productId === product.id);
+          const stock = product.stock ?? existing?.stock;
+          const wanted = (existing?.quantity ?? 0) + quantity;
+          if (stock != null && wanted > stock) {
+            throw new Error(stock > 0 ? `Доступно лише ${stock}` : 'Товару немає в наявності');
+          }
           let updated: CartItem[];
           if (existing) {
             updated = items.map((i) =>
               i.productId === product.id
-                ? { ...i, quantity: i.quantity + quantity, total: i.price * (i.quantity + quantity) }
+                ? { ...i, quantity: wanted, total: i.price * wanted, stock: stock ?? i.stock }
                 : i,
             );
           } else {
@@ -123,6 +132,7 @@ export const useCartStore = create<CartState>()(
                 image: product.image ?? null,
                 quantity,
                 total: Number(product.price) * quantity,
+                stock,
               },
             ];
           }
@@ -168,6 +178,10 @@ export const useCartStore = create<CartState>()(
           }
         }
         {
+          const current = get().items.find((i) => i.productId === productId);
+          if (current?.stock != null && quantity > current.stock) {
+            throw new Error(current.stock > 0 ? `Доступно лише ${current.stock}` : 'Товару немає в наявності');
+          }
           const updated = get().items.map((i) =>
             i.productId === productId
               ? { ...i, quantity, total: i.price * quantity }

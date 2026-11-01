@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Calendar, Tag, ArrowRight, BookOpen } from 'lucide-react'
 import type { Metadata } from 'next'
+import { Reveal } from '../../components/shared/interactive'
 
 export const revalidate = 60
 
@@ -51,7 +52,7 @@ export default async function BlogPage({ searchParams }: PageProps) {
       </div>
 
       {posts.length === 0 ? (
-        <div className="rounded-xl border border-dark/10 bg-white p-16 text-center">
+        <div className="rounded-3xl border border-dark/10 bg-white p-16 text-center">
           <BookOpen className="mx-auto mb-4 h-12 w-12 text-dark-200" />
           <h2 className="text-lg font-semibold text-dark">Публікацій поки немає</h2>
           <p className="mt-2 text-dark-500">Незабаром тут з'являться цікаві матеріали.</p>
@@ -59,8 +60,10 @@ export default async function BlogPage({ searchParams }: PageProps) {
       ) : (
         <>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {posts.map((post: any) => (
-              <BlogCard key={post.id} post={post} />
+            {posts.map((post: any, i: number) => (
+              <Reveal key={post.id} index={i % 3} className="h-full">
+                <BlogCard post={post} />
+              </Reveal>
             ))}
           </div>
 
@@ -92,7 +95,7 @@ function BlogCard({ post }: { post: any }) {
   return (
     <Link
       href={`/blog/${post.slug}`}
-      className="group flex flex-col overflow-hidden rounded-xl border border-dark/10 bg-white transition-shadow hover:shadow-md"
+      className="group flex flex-col overflow-hidden rounded-3xl border border-dark/10 bg-white transition-all duration-300 hover:-translate-y-1 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
     >
       {/* Image */}
       <div className="relative h-52 overflow-hidden bg-dark-50">
@@ -102,7 +105,7 @@ function BlogCard({ post }: { post: any }) {
             alt={post.title}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            className="object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -115,7 +118,7 @@ function BlogCard({ post }: { post: any }) {
             {post.tags.slice(0, 2).map((tag: string) => (
               <span
                 key={tag}
-                className="flex items-center gap-1 rounded-md bg-white/95 px-2.5 py-1 text-xs font-medium text-dark"
+                className="flex items-center gap-1 rounded-full bg-white/85 px-2.5 py-1 text-xs font-medium text-dark shadow-sm backdrop-blur"
               >
                 <Tag className="h-3 w-3" />
                 {tag}
@@ -140,7 +143,7 @@ function BlogCard({ post }: { post: any }) {
           )}
         </div>
 
-        <h2 className="mb-2 text-base font-semibold text-dark line-clamp-2">
+        <h2 className="mb-2 text-base font-semibold text-dark line-clamp-2 transition-colors group-hover:text-primary">
           {post.title}
         </h2>
 
@@ -148,9 +151,11 @@ function BlogCard({ post }: { post: any }) {
           <p className="text-sm text-dark-500 line-clamp-3 flex-1">{post.excerpt}</p>
         )}
 
-        <div className="mt-4 flex items-center gap-1 text-sm font-medium text-dark">
+        <div className="mt-5 flex items-center justify-between border-t border-dark/5 pt-4 text-sm font-medium text-dark">
           Читати далі
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-dark-50 transition-all duration-300 group-hover:bg-dark group-hover:text-white">
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </span>
         </div>
       </div>
     </Link>

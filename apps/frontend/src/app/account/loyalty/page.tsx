@@ -4,6 +4,9 @@ import { useEffect, useState } from 'react';
 import { Gift, Star, TrendingUp, ShoppingCart, ArrowUp, ArrowDown } from 'lucide-react';
 import api from '@/lib/api';
 import { useAuthStore } from '@/lib/auth';
+import { motion } from 'framer-motion';
+import { CountUp, Reveal } from '@/components/shared/interactive';
+import { iconChipClass, tileClass } from '@/lib/ui-classes';
 
 interface Tier { name: string; min: number; discount: number }
 interface LoyaltyHistory { id: string; points: number; description: string; createdAt: string }
@@ -44,64 +47,95 @@ export default function LoyaltyPage() {
   return (
     <div className="space-y-6">
       {/* Current points card */}
-      <div className="rounded-xl bg-dark p-8 text-white">
-        <div className="flex items-center justify-between">
+      <div className="relative overflow-hidden rounded-3xl bg-dark p-6 text-white sm:p-8">
+        <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-orange-400/20 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 left-10 h-64 w-64 rounded-full bg-primary-500/30 blur-3xl" />
+        <div className="relative flex items-center justify-between gap-6">
           <div>
-            <p className="text-sm font-medium text-white/60 uppercase tracking-widest">Бонусні бали</p>
-            <p className="mt-2 text-5xl font-semibold">{currentPoints}</p>
+            <p className="text-sm font-medium uppercase tracking-widest text-white/60">Бонусні бали</p>
+            <p className="mt-2 text-5xl font-semibold tabular-nums"><CountUp to={currentPoints} /></p>
             <p className="mt-2 text-sm text-white/70">Рівень: <span className="font-semibold text-white">{currentTier.name}</span></p>
           </div>
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/10">
-            <Star className="h-10 w-10 text-white" />
+          {/* Кільце прогресу до наступного рівня */}
+          <div className="relative h-24 w-24 shrink-0">
+            <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
+              <circle cx="50" cy="50" r="42" fill="none" strokeWidth="8" className="stroke-white/10" />
+              <motion.circle
+                cx="50" cy="50" r="42" fill="none" strokeWidth="8" strokeLinecap="round"
+                className="stroke-orange-400"
+                strokeDasharray={2 * Math.PI * 42}
+                initial={{ strokeDashoffset: 2 * Math.PI * 42 }}
+                animate={{ strokeDashoffset: 2 * Math.PI * 42 * (1 - (nextTier ? Math.min(currentPoints / nextTier.min, 1) : 1)) }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
+              />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Star className="h-8 w-8 fill-orange-400 text-orange-400" />
+            </div>
           </div>
         </div>
 
         {nextTier && (
-          <div className="mt-6">
+          <div className="relative mt-6">
             <div className="mb-2 flex items-center justify-between text-sm text-white/70">
               <span>До рівня «{nextTier.name}»</span>
               <span className="font-semibold text-white">{nextTier.min - currentPoints} балів</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-white/15">
-              <div
-                className="h-full rounded-full bg-white transition-all duration-700"
-                style={{ width: `${Math.min((currentPoints / nextTier.min) * 100, 100)}%` }}
+              <motion.div
+                className="h-full rounded-full bg-gradient-to-r from-orange-300 to-orange-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min((currentPoints / nextTier.min) * 100, 100)}%` }}
+                transition={{ duration: 1.2, ease: 'easeOut' }}
               />
             </div>
           </div>
         )}
 
-        <div className="mt-4 flex items-center gap-2 text-sm text-white/70">
+        <div className="relative mt-4 flex items-center gap-2 text-sm text-white/70">
           <ShoppingCart className="h-4 w-4" />
           <span>Загальна сума покупок: <span className="font-semibold text-white">{totalSpent.toLocaleString('uk-UA')} грн</span></span>
         </div>
       </div>
 
       {/* Tiers */}
-      <div className="rounded-xl bg-white p-6 border border-dark/10">
+      <div className="rounded-3xl border border-dark/10 bg-white p-6">
         <h3 className="mb-5 font-semibold text-dark">Рівні лояльності</h3>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {tiers.map((tier: Tier) => {
+        <div className="relative grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {/* Лінія-трек між рівнями (десктоп) */}
+          <div className="pointer-events-none absolute left-[12.5%] right-[12.5%] top-9 hidden h-0.5 overflow-hidden rounded-full bg-dark-100 sm:block">
+            <motion.div
+              className="h-full bg-dark"
+              initial={{ width: 0 }}
+              whileInView={{ width: `${(Math.max(0, tiers.findIndex(t => t.name === currentTier.name)) / Math.max(1, tiers.length - 1)) * 100}%` }}
+              viewport={{ once: true }}
+              transition={{ duration: 1, ease: 'easeOut' }}
+            />
+          </div>
+          {tiers.map((tier: Tier, i: number) => {
             const isActive = currentPoints >= tier.min && (nextTier ? currentPoints < nextTier.min : true);
             const isReached = currentPoints >= tier.min;
             return (
-              <div key={tier.name}
-                className={`rounded-lg border p-4 text-center transition-colors ${isActive ? 'border-dark bg-dark-50' : isReached ? 'border-dark/15 bg-white' : 'border-dark/10 bg-dark-50'}`}>
-                <div className="mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-dark-50">
-                  <Star className={`h-5 w-5 ${isReached ? 'text-dark-600' : 'text-dark-200'}`} />
+              <Reveal key={tier.name} index={i}>
+              <div
+                className={`relative rounded-2xl border p-4 text-center transition-all duration-300 hover:-translate-y-0.5 ${isActive ? 'border-dark/20 bg-white shadow-[0_12px_30px_rgba(13,27,42,0.10)]' : isReached ? 'border-dark/10 bg-white' : 'border-dark/5 bg-dark-50'}`}>
+                <div className={`relative mx-auto mb-2 flex h-10 w-10 items-center justify-center rounded-full transition-colors ${isReached ? 'bg-dark text-white' : 'bg-white text-dark-200 shadow-sm'}`}>
+                  {isActive && <span className="absolute inset-0 animate-ping rounded-full bg-dark/20" />}
+                  <Star className={`h-5 w-5 ${isReached ? 'fill-current' : ''}`} />
                 </div>
                 <p className="text-xs font-semibold text-dark">{tier.name}</p>
                 <p className="text-xs text-dark-400">від {tier.min} б.</p>
                 <p className={`mt-1 text-sm font-semibold ${isReached ? 'text-dark' : 'text-dark-200'}`}>{tier.discount}%</p>
                 {isActive && <span className="mt-1 inline-block rounded-full bg-dark px-2 py-0.5 text-[10px] font-semibold text-white">✓ Поточний</span>}
               </div>
+              </Reveal>
             );
           })}
         </div>
       </div>
 
       {/* How to earn */}
-      <div className="rounded-xl bg-white p-6 border border-dark/10">
+      <div className="rounded-3xl border border-dark/10 bg-white p-6">
         <h3 className="mb-5 font-semibold text-dark">Як заробити бали</h3>
         <div className="grid gap-3 sm:grid-cols-2">
           {[
@@ -110,8 +144,8 @@ export default function LoyaltyPage() {
             { icon: Gift, title: 'Реєстрація', desc: `${welcomeBonus} балів вітального бонусу` },
             { icon: TrendingUp, title: 'Акції', desc: 'Подвійні бали в акційний час' },
           ].map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="flex items-center gap-3 rounded-lg bg-dark-50 p-4">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-dark-500">
+            <div key={title} className={`${tileClass} flex items-center gap-3 p-4`}>
+              <div className={iconChipClass}>
                 <Icon className="h-5 w-5" />
               </div>
               <div>
@@ -124,7 +158,7 @@ export default function LoyaltyPage() {
       </div>
 
       {/* History */}
-      <div className="rounded-xl bg-white p-6 border border-dark/10">
+      <div className="rounded-3xl border border-dark/10 bg-white p-6">
         <h3 className="mb-5 font-semibold text-dark">Історія балів</h3>
         {loading ? (
           <div className="space-y-3">
@@ -134,8 +168,9 @@ export default function LoyaltyPage() {
           <p className="py-8 text-center text-dark-400">Активності ще не було. Зробіть перше замовлення!</p>
         ) : (
           <div className="space-y-3">
-            {history.map(entry => (
-              <div key={entry.id} className="flex items-center gap-4 rounded-lg bg-dark-50 p-4">
+            {history.map((entry, i) => (
+              <Reveal key={entry.id} index={i % 6}>
+              <div className={`${tileClass} flex items-center gap-4 p-4`}>
                 <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${entry.points > 0 ? 'bg-sage-50' : 'bg-red-50'}`}>
                   {entry.points > 0
                     ? <ArrowUp className="h-4 w-4 text-sage-600" />
@@ -147,10 +182,11 @@ export default function LoyaltyPage() {
                     {new Date(entry.createdAt).toLocaleDateString('uk-UA', { day: '2-digit', month: 'long', year: 'numeric' })}
                   </p>
                 </div>
-                <span className={`text-lg font-semibold ${entry.points > 0 ? 'text-sage-600' : 'text-red-600'}`}>
+                <span className={`text-lg font-semibold tabular-nums ${entry.points > 0 ? 'text-sage-600' : 'text-red-600'}`}>
                   {entry.points > 0 ? '+' : ''}{entry.points}
                 </span>
               </div>
+              </Reveal>
             ))}
           </div>
         )}

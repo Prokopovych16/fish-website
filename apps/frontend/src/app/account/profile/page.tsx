@@ -76,7 +76,7 @@ export default function ProfilePage() {
   return (
     <div className="space-y-6">
       {/* Profile card */}
-      <div className="rounded-xl bg-white p-8 border border-dark/10">
+      <div className="rounded-3xl border border-dark/10 bg-white p-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-2xl font-semibold text-dark">Мій профіль</h1>
           {!isEditing ? (
@@ -87,7 +87,7 @@ export default function ProfilePage() {
           ) : (
             <div className="flex gap-3">
               <button onClick={handleSave} disabled={saving}
-                className="flex items-center gap-2 rounded-lg bg-dark px-5 py-2.5 text-sm font-medium text-white transition hover:bg-dark-700 disabled:opacity-60">
+                className="flex items-center gap-2 rounded-xl bg-dark px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-dark-700 disabled:opacity-60 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]">
                 <Save className="h-4 w-4" /> {saving ? 'Збереження...' : 'Зберегти'}
               </button>
               <button onClick={handleCancel}
@@ -146,7 +146,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Change password */}
-      <div className="rounded-xl bg-white p-8 border border-dark/10">
+      <div className="rounded-3xl border border-dark/10 bg-white p-8">
         <div className="mb-6 flex items-center gap-3">
           <Lock className="h-5 w-5 text-dark-500" />
           <h2 className="text-xl font-semibold text-dark">Зміна пароля</h2>
@@ -162,7 +162,7 @@ export default function ProfilePage() {
         </div>
 
         <button onClick={handleChangePassword} disabled={pwSaving}
-          className="mt-5 rounded-lg bg-dark px-6 py-3 text-sm font-semibold text-white transition hover:bg-dark-700 disabled:opacity-60">
+          className="mt-5 rounded-xl bg-dark px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-dark-700 disabled:opacity-60 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]">
           {pwSaving ? 'Збереження...' : 'Змінити пароль'}
         </button>
       </div>

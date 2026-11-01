@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { MessageCircle, X, Phone } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const CONTACTS = [
   {
@@ -39,31 +40,47 @@ export function FloatingContactButton() {
   return (
     <div className="fixed bottom-5 right-5 z-40 flex flex-col items-end gap-3 md:bottom-8">
       {/* Contact options */}
-      {open && (
-        <div className="flex flex-col items-end gap-2.5">
-          {CONTACTS.map(contact => (
-            <a
-              key={contact.label}
-              href={contact.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium text-white shadow-md transition-colors duration-150 ${contact.color}`}
-              style={{ animation: 'fadeInRight 0.15s ease-out' }}
-            >
-              <span>{contact.label}</span>
-              {contact.icon}
-            </a>
-          ))}
-        </div>
-      )}
+      <AnimatePresence>
+        {open && (
+          <div className="flex flex-col items-end gap-2.5">
+            {CONTACTS.map((contact, i) => (
+              <motion.a
+                key={contact.label}
+                href={contact.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, x: 16, scale: 0.9 }}
+                animate={{ opacity: 1, x: 0, scale: 1 }}
+                exit={{ opacity: 0, x: 16, scale: 0.9 }}
+                transition={{ delay: (CONTACTS.length - 1 - i) * 0.05, type: 'spring', stiffness: 400, damping: 28 }}
+                whileHover={{ x: -4 }}
+                className={`flex min-h-[44px] items-center gap-3 rounded-xl px-4 text-sm font-medium text-white shadow-[0_10px_24px_rgba(22,24,28,0.2)] transition-colors duration-150 ${contact.color}`}
+              >
+                <span>{contact.label}</span>
+                {contact.icon}
+              </motion.a>
+            ))}
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Toggle button */}
       <button
         onClick={() => setOpen(o => !o)}
-        className="flex h-12 w-12 items-center justify-center rounded-full bg-dark text-white shadow-md transition-colors hover:bg-dark-700"
+        className="group relative flex h-14 w-14 items-center justify-center rounded-full bg-dark text-white shadow-[0_12px_30px_rgba(22,24,28,0.3)] transition-all duration-300 hover:scale-105 hover:bg-dark-700 active:scale-95"
         aria-label="Зв'язатися з нами"
+        aria-expanded={open}
       >
-        {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+        {!open && <span className="absolute inset-0 animate-ping rounded-full bg-dark/30 [animation-duration:2.5s]" />}
+        <motion.span
+          key={String(open)}
+          initial={{ rotate: -90, opacity: 0 }}
+          animate={{ rotate: 0, opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          className="relative flex"
+        >
+          {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5 w-5" />}
+        </motion.span>
       </button>
     </div>
   );

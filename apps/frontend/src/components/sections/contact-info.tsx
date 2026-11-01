@@ -72,9 +72,10 @@ export function ContactInfo() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="flex gap-6 rounded-lg border border-dark/10 bg-white p-6 transition-shadow hover:shadow-md"
+                    whileHover={{ y: -4 }}
+                className="group flex gap-6 rounded-3xl border border-dark/10 bg-white p-6 transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-dark-50 text-dark-500">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-dark-50 text-primary-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -109,9 +110,10 @@ export function ContactInfo() {
                     whileInView={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.1, duration: 0.5 }}
                     viewport={{ once: true }}
-                    className="flex gap-6 rounded-lg border border-dark/10 bg-white p-6 transition-shadow hover:shadow-md"
+                    whileHover={{ y: -4 }}
+                className="group flex gap-6 rounded-3xl border border-dark/10 bg-white p-6 transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
                   >
-                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-dark-50 text-dark-500">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-dark-50 text-primary-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
                       <Icon className="h-5 w-5" />
                     </div>
                     <div>
@@ -128,7 +130,7 @@ export function ContactInfo() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
               viewport={{ once: true }}
-              className="mt-8 rounded-lg bg-dark p-8 text-white"
+              className="mt-8 relative overflow-hidden rounded-3xl bg-dark p-8 text-white"
             >
               <h3 className="text-xl font-semibold mb-2">Оптові замовлення</h3>
               <p className="text-sm opacity-90 mb-4">
@@ -142,7 +144,7 @@ export function ContactInfo() {
               </p>
               <a
                 href="mailto:valigura.fish@gmail.com?subject=Оптове співробітництво"
-                className="inline-flex items-center gap-2 rounded-lg bg-white/15 px-6 py-3 text-sm font-medium transition-colors hover:bg-white/25"
+                className="inline-flex min-h-[48px] items-center gap-2 rounded-xl bg-white/15 px-6 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 hover:bg-white/25 active:scale-[0.98]"
               >
                 Обговорити умови
               </a>

@@ -40,7 +40,8 @@ export function Certifications() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
                 viewport={{ once: true }}
-                className="rounded-lg border border-dark/10 bg-white p-8 transition-shadow hover:shadow-md"
+                whileHover={{ y: -4 }}
+                className="group rounded-3xl border border-dark/10 bg-white p-8 transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
               >
                 <div className="mb-6 flex items-center justify-center">
                   <div className="relative h-24 w-24">
@@ -55,7 +56,7 @@ export function Certifications() {
 
                 <div className="text-center">
                   <div className="mb-4 flex justify-center">
-                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-dark-50 text-dark-500">
+                    <div className="flex h-11 w-11 items-center justify-center rounded-full bg-dark-50 text-primary-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
                       <Icon className="h-5 w-5" />
                     </div>
                   </div>
@@ -83,7 +84,7 @@ export function Certifications() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
           viewport={{ once: true }}
-          className="mt-16 rounded-xl bg-dark p-12 text-center text-white"
+          className="mt-16 relative overflow-hidden rounded-3xl bg-dark p-12 text-center text-white"
         >
           <Shield className="mx-auto mb-6 h-12 w-12 text-white/70" />
           <h3 className="text-2xl font-semibold mb-4">

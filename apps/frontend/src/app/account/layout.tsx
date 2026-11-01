@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { User, Package, Heart, CreditCard, LogOut } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useAuthStore } from '@/lib/auth';
+import { motion } from 'framer-motion';
 
 const navigation = [
   { name: 'Профіль', href: '/account/profile', icon: User },
@@ -58,38 +59,47 @@ export default function AccountLayout({
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Sidebar */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl border border-dark/10 p-6 sticky top-8">
+            <div className="sticky top-24 rounded-3xl border border-dark/10 bg-white p-6 shadow-[0_18px_40px_rgba(13,27,42,0.05)]">
               {/* User Info */}
               <div className="text-center mb-8">
-                <div className="w-20 h-20 bg-dark-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <User className="h-10 w-10 text-dark-500" />
+                <div className="relative mx-auto mb-4 h-20 w-20">
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-400 to-primary blur-md opacity-40" />
+                  <div className="relative flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-primary-500 to-primary text-2xl font-semibold text-white">
+                    {(user.firstName?.[0] ?? user.email[0]).toUpperCase()}
+                  </div>
                 </div>
                 <h2 className="font-semibold text-dark">
                   {user.firstName} {user.lastName}
                 </h2>
                 <p className="text-sm text-dark-500">{user.email}</p>
-                <div className="mt-2 inline-flex items-center gap-1 px-3 py-1 bg-dark-50 rounded-full text-sm text-dark-600 font-medium">
+                <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-orange-50 px-3 py-1 text-sm font-medium text-orange-600">
                   <CreditCard className="h-4 w-4" />
                   {user.loyaltyPoints} балів
                 </div>
               </div>
 
               {/* Navigation */}
-              <nav className="space-y-2">
+              <nav className="space-y-1">
                 {navigation.map((item) => {
                   const Icon = item.icon;
+                  const active = pathname === item.href;
                   return (
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-sm font-medium ${
-                        pathname === item.href
-                          ? 'bg-dark text-white'
-                          : 'text-dark-600 hover:bg-dark/5'
+                      className={`group relative flex min-h-[48px] items-center gap-3 rounded-xl px-4 text-sm font-medium transition-colors duration-200 ${
+                        active ? 'text-white' : 'text-dark-600 hover:bg-dark-50 hover:text-dark'
                       }`}
                     >
-                      <Icon className="h-5 w-5" />
-                      {item.name}
+                      {active && (
+                        <motion.span
+                          layoutId="account-nav-pill"
+                          className="absolute inset-0 rounded-xl bg-dark shadow-[0_8px_20px_rgba(22,24,28,0.18)]"
+                          transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                        />
+                      )}
+                      <Icon className={`relative h-5 w-5 transition-transform duration-300 ${active ? '' : 'group-hover:scale-110'}`} />
+                      <span className="relative">{item.name}</span>
                     </Link>
                   );
                 })}
@@ -99,9 +109,9 @@ export default function AccountLayout({
               <div className="mt-8 pt-6 border-t border-dark/10">
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-3 px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full text-left"
+                  className="group flex min-h-[48px] w-full items-center gap-3 rounded-xl px-4 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
                 >
-                  <LogOut className="h-5 w-5" />
+                  <LogOut className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-0.5" />
                   Вийти
                 </button>
               </div>

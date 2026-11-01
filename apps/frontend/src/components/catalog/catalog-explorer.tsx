@@ -2,9 +2,12 @@
 
 import { useRef, useTransition } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
-import { Search, SlidersHorizontal, X } from 'lucide-react'
+import { ArrowUpDown, ChevronDown, Search, SlidersHorizontal, X } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
 import { ProductCard } from '../products/product-card'
 import type { ProductItem, Category } from '../../lib/products'
+import { Reveal, Shine } from '../shared/interactive'
+import { secondaryLinkClass } from '../../lib/ui-classes'
 
 interface CatalogExplorerProps {
   products: ProductItem[]
@@ -84,98 +87,125 @@ export function CatalogExplorer({
     })
   }
 
+  const fieldClass =
+    'rounded-xl border border-dark/5 bg-dark-50 py-2.5 text-sm text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none'
+
+  const categoryOptions = [{ slug: '', name: 'Всі' }, ...flat.map((c) => ({ slug: c.slug, name: c.name }))]
+
   return (
-    <div className={`space-y-6 transition-opacity ${isPending ? 'opacity-50 pointer-events-none' : ''}`}>
+    <div className="space-y-6">
+      {/* Категорії — горизонтальні "пігулки" */}
+      <div className="-mx-6 overflow-x-auto px-6 pb-1 lg:mx-0 lg:px-0">
+        <div className="inline-flex gap-1 rounded-2xl bg-dark-50 p-1">
+          {categoryOptions.map((c) => {
+            const active = currentCategory === c.slug
+            return (
+              <button
+                key={c.slug || 'all'}
+                type="button"
+                onClick={() => navigate({ ...buildCurrent(), category: c.slug })}
+                className={`relative min-h-[40px] whitespace-nowrap rounded-xl px-4 text-sm font-medium transition-colors duration-200 ${
+                  active ? 'text-white' : 'text-dark-500 hover:text-dark'
+                }`}
+              >
+                {active && (
+                  <motion.span
+                    layoutId="catalog-category-pill"
+                    className="absolute inset-0 rounded-xl bg-dark shadow-[0_8px_20px_rgba(22,24,28,0.18)]"
+                    transition={{ type: 'spring', stiffness: 400, damping: 34 }}
+                  />
+                )}
+                <span className="relative">{c.name}</span>
+              </button>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Filters panel */}
-      <form ref={formRef} onSubmit={handleSubmit} className="rounded-xl border border-dark/10 bg-white px-4 py-3">
-        {/* Row 1: all controls in one line */}
+      <form ref={formRef} onSubmit={handleSubmit} className="rounded-2xl border border-dark/10 bg-white p-3 sm:p-4">
+        <input type="hidden" name="category" value={currentCategory} />
         <div className="flex flex-wrap items-center gap-2">
           {/* Search */}
-          <div className="relative min-w-[160px] flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dark-400" />
+          <div className="group relative min-w-[180px] flex-1">
+            <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-dark-400 transition-colors group-focus-within:text-dark" />
             <input
               name="search"
               defaultValue={currentSearch}
-              placeholder="Пошук..."
-              className="w-full rounded-md border border-dark/10 py-2 pl-8 pr-3 text-sm focus:border-dark/30 focus:outline-none"
+              placeholder="Пошук товарів..."
+              className={`${fieldClass} w-full pl-10 pr-3`}
             />
           </div>
 
-          {/* Category */}
-          <select
-            name="category"
-            defaultValue={currentCategory}
-            onChange={e => navigate({ ...buildCurrent(), category: e.target.value })}
-            className="rounded-md border border-dark/10 bg-white px-3 py-2 text-sm focus:border-dark/30 focus:outline-none"
-          >
-            <option value="">Всі категорії</option>
-            {flat.map(c => (
-              <option key={c.id} value={c.slug}>{c.name}</option>
-            ))}
-          </select>
-
           {/* Sort */}
-          <select
-            name="sort"
-            defaultValue={currentSort}
-            onChange={e => navigate({ ...buildCurrent(), sort: e.target.value })}
-            className="rounded-md border border-dark/10 bg-white px-3 py-2 text-sm focus:border-dark/30 focus:outline-none"
-          >
-            {SORT_OPTIONS.map(o => (
-              <option key={o.value} value={o.value}>{o.label}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <ArrowUpDown className="pointer-events-none absolute left-3.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dark-400" />
+            <select
+              name="sort"
+              defaultValue={currentSort}
+              onChange={e => navigate({ ...buildCurrent(), sort: e.target.value })}
+              className={`${fieldClass} cursor-pointer appearance-none pl-9 pr-8`}
+            >
+              {SORT_OPTIONS.map(o => (
+                <option key={o.value} value={o.value}>{o.label}</option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-dark-400" />
+          </div>
 
           {/* Price range */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <input
               name="minPrice"
               type="number"
               defaultValue={currentMinPrice ?? ''}
-              placeholder="Від"
+              placeholder="Від, ₴"
               min={0}
-              className="w-20 rounded-md border border-dark/10 px-2 py-2 text-sm focus:border-dark/30 focus:outline-none"
+              className={`${fieldClass} w-24 px-3`}
             />
-            <span className="text-dark-300 text-xs">—</span>
+            <span className="text-xs text-dark-300">—</span>
             <input
               name="maxPrice"
               type="number"
               defaultValue={currentMaxPrice ?? ''}
-              placeholder="До"
+              placeholder="До, ₴"
               min={0}
-              className="w-20 rounded-md border border-dark/10 px-2 py-2 text-sm focus:border-dark/30 focus:outline-none"
+              className={`${fieldClass} w-24 px-3`}
             />
           </div>
 
-          {/* In-stock */}
-          <label className="inline-flex cursor-pointer items-center gap-1.5 whitespace-nowrap">
+          {/* In-stock — перемикач */}
+          <label className="group inline-flex min-h-[44px] cursor-pointer items-center gap-2.5 whitespace-nowrap rounded-xl px-2">
             <input
               type="checkbox"
               name="inStock"
               defaultChecked={!!currentInStock}
               onChange={e => navigate({ ...buildCurrent(), inStock: e.target.checked ? 'true' : '' })}
-              className="h-3.5 w-3.5 rounded accent-dark"
+              className="peer sr-only"
             />
-            <span className="text-sm text-dark-500">В наявності</span>
+            <span className="relative h-6 w-10 rounded-full bg-dark-200 transition-colors duration-300 peer-checked:bg-sage peer-focus-visible:ring-2 peer-focus-visible:ring-dark/30 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-all after:duration-300 peer-checked:after:translate-x-4" />
+            <span className="text-sm text-dark-500 transition-colors group-hover:text-dark">В наявності</span>
           </label>
 
           {/* Submit + clear */}
           <div className="ml-auto flex items-center gap-1.5">
             <button
               type="submit"
-              className="flex items-center gap-1.5 rounded-md bg-dark px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-dark-700"
+              className="group relative flex min-h-[44px] items-center gap-2 overflow-hidden rounded-xl bg-dark px-4 text-sm font-medium text-white transition-all duration-300 hover:bg-dark-700 hover:shadow-[0_8px_20px_rgba(22,24,28,0.2)] active:scale-[0.98]"
             >
-              <SlidersHorizontal className="h-3.5 w-3.5" />
-              Застосувати
+              <Shine />
+              <SlidersHorizontal className="relative h-4 w-4" />
+              <span className="relative">Застосувати</span>
             </button>
             {hasFilters && (
               <button
                 type="button"
                 onClick={() => router.push(pathname)}
-                className="flex items-center gap-1 rounded-md border border-dark/10 px-2.5 py-2 text-sm text-dark-400 transition-colors hover:text-dark"
+                className="flex h-11 w-11 items-center justify-center rounded-xl border border-dark/10 text-dark-400 transition-all duration-300 hover:rotate-90 hover:border-dark/20 hover:text-dark"
                 title="Скинути фільтри"
+                aria-label="Скинути фільтри"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </button>
             )}
           </div>
@@ -183,58 +213,80 @@ export function CatalogExplorer({
 
         {/* Active filter chips — тільки якщо є активні фільтри */}
         {hasFilters && (
-          <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-dark/5 pt-2.5">
-            <span className="text-xs text-dark-400">{total} товарів</span>
-            {currentSearch && (
-              <Chip label={`«${currentSearch}»`} onRemove={() => navigate({ ...buildCurrent(), search: '' })} />
-            )}
-            {currentCategory && (
-              <Chip label={flat.find(c => c.slug === currentCategory)?.name ?? currentCategory} onRemove={() => navigate({ ...buildCurrent(), category: '' })} />
-            )}
-            {currentSort && (
-              <Chip label={SORT_OPTIONS.find(o => o.value === currentSort)?.label ?? currentSort} onRemove={() => navigate({ ...buildCurrent(), sort: '' })} />
-            )}
-            {currentMinPrice && (
-              <Chip label={`від ${currentMinPrice} грн`} onRemove={() => navigate({ ...buildCurrent(), minPrice: '' })} />
-            )}
-            {currentMaxPrice && (
-              <Chip label={`до ${currentMaxPrice} грн`} onRemove={() => navigate({ ...buildCurrent(), maxPrice: '' })} />
-            )}
-            {currentInStock && (
-              <Chip label="В наявності" onRemove={() => navigate({ ...buildCurrent(), inStock: '' })} />
-            )}
+          <div className="mt-3 flex flex-wrap items-center gap-1.5 border-t border-dark/5 pt-3">
+            <span className="mr-1 text-xs font-medium text-dark-400">
+              Знайдено: <span className="text-dark">{total}</span>
+            </span>
+            <AnimatePresence initial={false}>
+              {currentSearch && (
+                <Chip key="search" label={`«${currentSearch}»`} onRemove={() => navigate({ ...buildCurrent(), search: '' })} />
+              )}
+              {currentCategory && (
+                <Chip key="category" label={flat.find(c => c.slug === currentCategory)?.name ?? currentCategory} onRemove={() => navigate({ ...buildCurrent(), category: '' })} />
+              )}
+              {currentSort && (
+                <Chip key="sort" label={SORT_OPTIONS.find(o => o.value === currentSort)?.label ?? currentSort} onRemove={() => navigate({ ...buildCurrent(), sort: '' })} />
+              )}
+              {currentMinPrice && (
+                <Chip key="min" label={`від ${currentMinPrice} грн`} onRemove={() => navigate({ ...buildCurrent(), minPrice: '' })} />
+              )}
+              {currentMaxPrice && (
+                <Chip key="max" label={`до ${currentMaxPrice} грн`} onRemove={() => navigate({ ...buildCurrent(), maxPrice: '' })} />
+              )}
+              {currentInStock && (
+                <Chip key="stock" label="В наявності" onRemove={() => navigate({ ...buildCurrent(), inStock: '' })} />
+              )}
+            </AnimatePresence>
           </div>
         )}
       </form>
 
       {/* Grid */}
-      {products.length === 0 ? (
-        <div className="rounded-xl border border-dark/10 bg-white p-16 text-center">
-          <Search className="mx-auto mb-4 h-10 w-10 text-dark-200" />
-          <p className="text-lg font-medium text-dark">Нічого не знайдено</p>
-          <p className="mt-2 text-sm text-dark-500">Спробуйте змінити параметри фільтрації</p>
-          <button onClick={() => router.push(pathname)} className="mt-5 rounded-lg border border-dark/10 px-5 py-2.5 text-sm font-medium text-dark-500 transition-colors hover:text-dark">
-            Скинути фільтри
-          </button>
-        </div>
-      ) : (
-        <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-          {products.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </section>
-      )}
+      <div className={`transition-opacity duration-300 ${isPending ? 'pointer-events-none opacity-50' : ''}`}>
+        {products.length === 0 ? (
+          <div className="rounded-3xl border border-dark/5 bg-dark-50 p-16 text-center">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm">
+              <Search className="h-7 w-7 text-dark-300" />
+            </div>
+            <p className="text-lg font-medium text-dark">Нічого не знайдено</p>
+            <p className="mt-2 text-sm text-dark-500">Спробуйте змінити параметри фільтрації</p>
+            <button onClick={() => router.push(pathname)} className={`${secondaryLinkClass} mt-6`}>
+              Скинути фільтри
+            </button>
+          </div>
+        ) : (
+          <section className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            {products.map((product, i) => (
+              <Reveal key={product.id} index={i % 4} className="h-full">
+                <ProductCard product={product} />
+              </Reveal>
+            ))}
+          </section>
+        )}
+      </div>
     </div>
   )
 }
 
 function Chip({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="flex items-center gap-1.5 rounded-md bg-dark/5 px-2.5 py-1 text-xs font-medium text-dark">
+    <motion.span
+      layout
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ duration: 0.2 }}
+      className="flex items-center gap-1.5 rounded-full bg-dark-50 py-1 pl-3 pr-1 text-xs font-medium text-dark"
+    >
       {label}
-      <button type="button" onClick={onRemove} className="text-dark-400 hover:text-dark transition-colors">
+      <button
+        type="button"
+        onClick={onRemove}
+        aria-label={`Прибрати фільтр ${label}`}
+        className="flex h-6 w-6 items-center justify-center rounded-full text-dark-400 transition-all hover:bg-dark hover:text-white"
+      >
         <X className="h-3 w-3" />
       </button>
-    </span>
+    </motion.span>
   )
 }

@@ -17,6 +17,7 @@ export class WishlistService {
             price: true,
             oldPrice: true,
             stock: true,
+            unit: true,
             images: {
               where: { isMain: true },
               select: { url: true, alt: true },

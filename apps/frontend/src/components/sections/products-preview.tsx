@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import { getFeaturedProducts } from '../../lib/products';
+import { ArrowRight } from 'lucide-react';
 import { ProductCard } from '../products/product-card';
+import { Reveal } from '../shared/interactive';
+import { secondaryLinkClass } from '../../lib/ui-classes';
 
 export async function ProductsPreview() {
   const products = await getFeaturedProducts(3);
@@ -17,15 +20,18 @@ export async function ProductsPreview() {
 
         <Link
           href="/catalog"
-          className="inline-flex items-center gap-2 rounded-lg border border-dark/15 bg-white px-5 py-2.5 text-sm font-medium text-dark transition-colors hover:bg-dark/5"
+          className={secondaryLinkClass}
         >
-          Весь каталог →
+          Весь каталог
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+        {products.map((product, i) => (
+          <Reveal key={product.id} index={i} className="h-full">
+            <ProductCard product={product} />
+          </Reveal>
         ))}
       </div>
     </section>

@@ -40,6 +40,11 @@ export const metadata: Metadata = {
   },
   twitter: { card: 'summary_large_image' },
   manifest: '/manifest.json',
+  icons: {
+    icon: [{ url: '/icons/favicon.png', type: 'image/png' }],
+    shortcut: '/icons/favicon.png',
+    apple: '/icons/icon-192.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',

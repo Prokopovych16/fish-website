@@ -99,7 +99,7 @@ export function ContactForm() {
                     value={formData.name}
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     required
-                    className="w-full rounded-lg border border-dark/10 px-4 py-3 focus:border-dark/30 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                     placeholder="Введіть ваше ім'я"
                   />
                 </div>
@@ -112,7 +112,7 @@ export function ContactForm() {
                     value={formData.email}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     required
-                    className="w-full rounded-lg border border-dark/10 px-4 py-3 focus:border-dark/30 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -127,7 +127,7 @@ export function ContactForm() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
-                    className="w-full rounded-lg border border-dark/10 px-4 py-3 focus:border-dark/30 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                     placeholder="+38 (050) 123-45-67"
                   />
                 </div>
@@ -139,7 +139,7 @@ export function ContactForm() {
                     value={formData.subject}
                     onChange={(e) => handleInputChange('subject', e.target.value)}
                     required
-                    className="w-full rounded-lg border border-dark/10 px-4 py-3 focus:border-dark/30 focus:outline-none transition-colors"
+                    className="w-full px-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                   >
                     <option value="">Оберіть тему</option>
                     <option value="order">Замовлення товару</option>
@@ -160,7 +160,7 @@ export function ContactForm() {
                   onChange={(e) => handleInputChange('message', e.target.value)}
                   required
                   rows={6}
-                  className="w-full rounded-lg border border-dark/10 px-4 py-3 focus:border-dark/30 focus:outline-none transition-colors resize-none"
+                  className="w-full px-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none resize-none"
                   placeholder="Опишіть ваше питання або замовлення..."
                 />
               </div>

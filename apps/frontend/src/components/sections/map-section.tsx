@@ -64,7 +64,7 @@ export function MapSection() {
             transition={{ duration: 0.4, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6 text-white h-full">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10 text-white h-full">
               <h3 className="text-base font-semibold mb-6">Час роботи</h3>
 
               <div className="space-y-3 text-sm">

@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Eye, EyeOff, Lock, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/lib/auth';
+import { PasswordStrength } from '@/components/shared/interactive';
 
 function ResetPasswordForm() {
   const [password, setPassword] = useState('');
@@ -58,10 +59,12 @@ function ResetPasswordForm() {
 
   if (success) {
     return (
-      <div className="min-h-screen bg-surface flex items-center justify-center px-4">
-        <div className="w-full max-w-md">
+      <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface px-4">
+      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-primary-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-sage-100/70 blur-3xl" />
+        <div className="relative w-full max-w-md">
           {/* Success Message */}
-          <div className="bg-white rounded-xl border border-dark/10 p-8 text-center">
+          <div className="rounded-3xl border border-dark/10 bg-white/90 p-6 shadow-[0_30px_90px_rgba(13,27,42,0.08)] backdrop-blur sm:p-8 text-center">
             <div className="w-16 h-16 bg-sage-50 rounded-full flex items-center justify-center mx-auto mb-6">
               <CheckCircle className="h-8 w-8 text-sage-600" />
             </div>
@@ -79,8 +82,10 @@ function ResetPasswordForm() {
   }
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface px-4">
+      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-primary-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-sage-100/70 blur-3xl" />
+      <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <span className="text-lg font-semibold tracking-tight text-dark">Валігура</span>
@@ -89,7 +94,7 @@ function ResetPasswordForm() {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl border border-dark/10 p-8">
+        <div className="rounded-3xl border border-dark/10 bg-white/90 p-6 shadow-[0_30px_90px_rgba(13,27,42,0.08)] backdrop-blur sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700 text-sm">
@@ -108,22 +113,26 @@ function ResetPasswordForm() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 border border-dark/10 rounded-lg focus:border-dark/30 focus:outline-none transition-colors"
+                  className="peer w-full pl-12 pr-12 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                   placeholder="Мінімум 8 символів"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-400 h-5 w-5" />
+                <Lock className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-dark-400 transition-colors duration-300 peer-focus:text-dark" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-dark-400 hover:text-dark-500"
+                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-dark-400 transition-all hover:bg-white hover:text-dark"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>
               </div>
-              <p className="mt-1 text-xs text-dark-400">
-                Мінімум 8 символів, велика літера та цифра
-              </p>
+              {password ? (
+                <PasswordStrength password={password} />
+              ) : (
+                <p className="mt-1 text-xs text-dark-400">
+                  Мінімум 8 символів, велика літера та цифра
+                </p>
+              )}
             </div>
 
             {/* Confirm Password */}
@@ -137,15 +146,15 @@ function ResetPasswordForm() {
                   type={showConfirmPassword ? 'text' : 'password'}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 border border-dark/10 rounded-lg focus:border-dark/30 focus:outline-none transition-colors"
+                  className="peer w-full pl-12 pr-12 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                   placeholder="Повторіть пароль"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-400 h-5 w-5" />
+                <Lock className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-dark-400 transition-colors duration-300 peer-focus:text-dark" />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-dark-400 hover:text-dark-500"
+                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-dark-400 transition-all hover:bg-white hover:text-dark"
                 >
                   {showConfirmPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>

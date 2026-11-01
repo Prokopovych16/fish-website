@@ -1,12 +1,15 @@
 #!/bin/bash
 # =============================================================================
-# Одноразове налаштування сервера (Ubuntu 22.04 LTS)
+# Одноразове налаштування ЧИСТОГО сервера (Ubuntu 22.04 LTS)
 # Запускати від root або з sudo
+#
+# ⚠️ НЕ запускати на сервері, де вже працюють інші сайти (fish-erp):
+#    скрипт робить apt upgrade та перевстановлює Node.js. Там виконуйте кроки вручну.
 # =============================================================================
 
 set -e
 
-DOMAIN="YOUR_DOMAIN"
+DOMAIN="valigura-fish.com"
 APP_DIR="/var/www/fish-shop"
 
 echo "=== [1/8] Оновлення пакетів ==="
@@ -65,7 +68,6 @@ echo ""
 echo "2. Налаштувати .env файли (div нижче)"
 echo ""
 echo "3. Налаштувати nginx:"
-echo "   sed -i 's/YOUR_DOMAIN/${DOMAIN}/g' /var/www/fish-shop/deploy/nginx.conf"
 echo "   cp /var/www/fish-shop/deploy/nginx.conf /etc/nginx/sites-available/fish-shop"
 echo "   ln -sf /etc/nginx/sites-available/fish-shop /etc/nginx/sites-enabled/fish-shop"
 echo "   nginx -t && systemctl reload nginx"

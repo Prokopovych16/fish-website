@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Heart, ShoppingCart } from 'lucide-react';
 import api from '@/lib/api';
 import { useCartStore } from '@/lib/cart';
 import { useWishlistStore } from '@/lib/wishlist';
+import { FitImage } from '../../../components/products/fit-image';
 
 interface WishlistProduct {
   id: string;
@@ -16,6 +16,7 @@ interface WishlistProduct {
   oldPrice: number | null;
   image: string | null;
   stock: number;
+  unit: string;
 }
 
 interface WishlistItem {
@@ -57,8 +58,8 @@ export default function WishlistPage() {
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {[1, 2, 3].map(i => (
-          <div key={i} className="rounded-xl bg-white p-4 border border-dark/10 animate-pulse">
-            <div className="aspect-[4/3] rounded-lg bg-dark-100 mb-4" />
+          <div key={i} className="rounded-3xl border border-dark/10 bg-white p-4 animate-pulse">
+            <div className="aspect-[4/5] rounded-lg bg-dark-100 mb-4" />
             <div className="h-4 w-3/4 rounded-full bg-dark-100 mb-2" />
             <div className="h-4 w-1/2 rounded-full bg-dark-50" />
           </div>
@@ -74,7 +75,7 @@ export default function WishlistPage() {
         <h2 className="text-xl font-semibold text-dark mb-2">Список бажань порожній</h2>
         <p className="text-dark-400 mb-6">Додайте товари до списку бажань, щоб не загубити їх!</p>
         <Link href="/catalog"
-          className="inline-flex items-center gap-2 rounded-lg bg-dark px-6 py-3 text-sm font-semibold text-white transition hover:bg-dark-700">
+          className="inline-flex items-center gap-2 rounded-xl bg-dark px-6 py-3 text-sm font-semibold text-white transition-all duration-300 hover:bg-dark-700 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]">
           Переглянути каталог
         </Link>
       </div>
@@ -91,10 +92,10 @@ export default function WishlistPage() {
           const p = item.product;
           const discount = p.oldPrice ? Math.round(((p.oldPrice - p.price) / p.oldPrice) * 100) : null;
           return (
-            <div key={item.id} className="rounded-xl bg-white border border-dark/10 overflow-hidden group hover:shadow-md transition-all duration-300">
-              <div className="relative aspect-[4/3] overflow-hidden bg-dark-50">
+            <div key={item.id} className="rounded-xl bg-white border border-dark/10 overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]">
+              <div className="relative aspect-[4/5] overflow-hidden bg-dark-50">
                 {p.image
-                  ? <Image src={p.image} alt={p.name} fill sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ? <FitImage src={p.image} alt={p.name} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" className="group-hover:scale-105 transition-transform duration-300" />
                   : <div className="h-full w-full flex items-center justify-center text-dark-200 text-4xl">🐟</div>}
                 {discount && (
                   <div className="absolute top-3 left-3 rounded-full bg-red-500 px-2.5 py-1 text-xs font-semibold text-white">
@@ -112,7 +113,7 @@ export default function WishlistPage() {
                   {p.name}
                 </Link>
                 <div className="mt-3">
-                  <span className="text-xl font-semibold text-dark">{p.price.toLocaleString('uk-UA')} грн</span>
+                  <span className="text-xl font-semibold text-dark">{p.price.toLocaleString('uk-UA')} грн<span className="ml-1 text-sm font-medium text-dark-400">/ {p.unit}</span></span>
                   {p.oldPrice && (
                     <span className="ml-2 text-sm text-dark-400 line-through">{p.oldPrice.toLocaleString('uk-UA')} грн</span>
                   )}
@@ -121,7 +122,7 @@ export default function WishlistPage() {
                   <button
                     onClick={() => handleAddToCart(item)}
                     disabled={p.stock === 0}
-                    className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-dark px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-dark-700 disabled:opacity-50">
+                    className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-dark px-4 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-dark-700 disabled:opacity-50 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]">
                     <ShoppingCart className="h-4 w-4" />
                     {p.stock === 0 ? 'Немає' : 'В кошик'}
                   </button>

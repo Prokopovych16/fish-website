@@ -65,7 +65,7 @@ export function BannersSection() {
   return (
     <section className="relative overflow-hidden bg-surface py-16">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="relative aspect-[16/6] overflow-hidden rounded-xl bg-dark-50">
+        <div className="group relative aspect-[4/5] overflow-hidden rounded-3xl bg-dark-50 sm:aspect-[16/6]">
           <motion.div
             key={currentIndex}
             initial={{ opacity: 0 }}
@@ -74,13 +74,21 @@ export function BannersSection() {
             transition={{ duration: 0.4 }}
             className="absolute inset-0"
           >
-            <Image
-              src={currentBanner.image}
-              alt={currentBanner.title}
-              fill
-              className="object-cover"
-              priority
-            />
+            {/* Повільний "Ken Burns" зум для живості */}
+            <motion.div
+              className="absolute inset-0"
+              initial={{ scale: 1.08 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 6, ease: 'easeOut' }}
+            >
+              <Image
+                src={currentBanner.image}
+                alt={currentBanner.title}
+                fill
+                className="object-cover"
+                priority
+              />
+            </motion.div>
             <div className="absolute inset-0 bg-gradient-to-r from-dark/70 via-dark/40 to-transparent" />
 
             <div className="absolute inset-0 flex items-center">
@@ -113,7 +121,7 @@ export function BannersSection() {
                     >
                       <a
                         href={currentBanner.buttonLink}
-                        className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-medium text-dark transition-colors hover:bg-white/90"
+                        className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-dark shadow-[0_10px_30px_rgba(255,255,255,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(255,255,255,0.2)] active:scale-[0.98]"
                       >
                         {currentBanner.buttonText}
                       </a>
@@ -128,26 +136,26 @@ export function BannersSection() {
             <>
               <button
                 onClick={prevSlide}
-                className="absolute left-5 top-1/2 -translate-y-1/2 rounded-full bg-white/15 p-2.5 text-white transition-colors hover:bg-white/25"
+                className="absolute left-5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/15 text-white backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-white hover:text-dark active:scale-95 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Попередній банер"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-5 top-1/2 -translate-y-1/2 rounded-full bg-white/15 p-2.5 text-white transition-colors hover:bg-white/25"
+                className="absolute right-5 top-1/2 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-white/15 text-white backdrop-blur transition-all duration-300 hover:scale-105 hover:bg-white hover:text-dark active:scale-95 sm:opacity-0 sm:group-hover:opacity-100"
                 aria-label="Наступний банер"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
 
-              <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 space-x-2">
+              <div className="absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-1.5 rounded-full bg-dark/30 px-2.5 py-1.5 backdrop-blur">
                 {banners.map((_, index) => (
                   <button
                     key={index}
                     onClick={() => setCurrentIndex(index)}
-                    className={`h-2 w-2 rounded-full transition-all ${
-                      index === currentIndex ? 'bg-white' : 'bg-white/50'
+                    className={`h-1.5 rounded-full transition-all duration-300 ${
+                      index === currentIndex ? 'w-6 bg-white' : 'w-1.5 bg-white/50 hover:bg-white/80'
                     }`}
                     aria-label={`Перейти до банера ${index + 1}`}
                   />

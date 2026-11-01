@@ -39,7 +39,8 @@ export function TeamSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.6 }}
               viewport={{ once: true }}
-              className="rounded-lg border border-dark/10 bg-white p-8 transition-shadow hover:shadow-md"
+              whileHover={{ y: -4 }}
+                className="group rounded-3xl border border-dark/10 bg-white p-8 transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
             >
               <h3 className="text-base font-semibold text-dark mb-3">
                 {value.title}

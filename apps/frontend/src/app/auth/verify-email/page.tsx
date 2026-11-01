@@ -88,7 +88,7 @@ function VerifyEmailContent() {
   if (state === 'success') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-        <div className="w-full max-w-md text-center">
+        <div className="relative w-full max-w-md text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-sage-50">
             <CheckCircle className="h-10 w-10 text-sage-600" />
           </div>
@@ -111,7 +111,7 @@ function VerifyEmailContent() {
     const alreadyVerified = errorMsg.toLowerCase().includes('вже підтверджений');
     return (
       <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-        <div className="w-full max-w-md text-center">
+        <div className="relative w-full max-w-md text-center">
           <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-red-50">
             <XCircle className="h-10 w-10 text-red-500" />
           </div>
@@ -150,7 +150,7 @@ function VerifyEmailContent() {
   // no-token state: user navigated here without a token (just registered)
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface px-4">
-      <div className="w-full max-w-md text-center">
+      <div className="relative w-full max-w-md text-center">
         <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-dark-50">
           <Mail className="h-10 w-10 text-dark-500" />
         </div>

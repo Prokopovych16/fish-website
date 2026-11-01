@@ -79,7 +79,7 @@ export class EmailService {
           <p style="color: #666; font-size: 14px;">Посилання дійсне 24 години.</p>
           <p style="color: #666; font-size: 14px;">Якщо ви не реєструвалися, проігноруйте цей лист.</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="color: #999; font-size: 12px;">ФОП Валігура Б.В. | noreply@fish-shop.ua</p>
+          <p style="color: #999; font-size: 12px;">ФОП Валігура Б.В. | noreply@valigura-fish.com</p>
         </div>
       `,
     });
@@ -110,7 +110,7 @@ export class EmailService {
           <p style="color: #666; font-size: 14px;">Посилання дійсне 1 годину.</p>
           <p style="color: #666; font-size: 14px;">Якщо ви не робили цей запит, проігноруйте цей лист.</p>
           <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <p style="color: #999; font-size: 12px;">ФОП Валігура Б.В. | noreply@fish-shop.ua</p>
+          <p style="color: #999; font-size: 12px;">ФОП Валігура Б.В. | noreply@valigura-fish.com</p>
         </div>
       `,
     });

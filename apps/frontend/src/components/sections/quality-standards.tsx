@@ -53,10 +53,11 @@ export function QualityStandards() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.06, duration: 0.4 }}
                 viewport={{ once: true }}
-                className="rounded-lg border border-dark/10 bg-white p-8 transition-shadow hover:shadow-md"
+                whileHover={{ y: -4 }}
+                className="group rounded-3xl border border-dark/10 bg-white p-8 transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
               >
                 <div className="flex items-start gap-6">
-                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-dark-50 text-dark-500">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-dark-50 text-primary-500 transition-all duration-300 group-hover:scale-110 group-hover:bg-primary group-hover:text-white">
                     <Icon className="h-6 w-6" />
                   </div>
                   <div className="flex-1">
@@ -78,7 +79,7 @@ export function QualityStandards() {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4, duration: 0.6 }}
           viewport={{ once: true }}
-          className="mt-16 rounded-xl bg-white p-12 shadow-lg"
+          className="mt-16 rounded-3xl border border-dark/10 bg-white p-8 shadow-[0_30px_90px_rgba(13,27,42,0.08)] sm:p-12"
         >
           <div className="grid gap-8 lg:grid-cols-2 lg:items-center">
             <div>

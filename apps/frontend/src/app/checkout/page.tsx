@@ -3,7 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, User, Truck, CreditCard, CheckCircle, Package, ChevronRight, Search } from 'lucide-react';
+import { ArrowLeft, User, Truck, CreditCard, CheckCircle, Package, ChevronRight, Search, Check, Building2, Home, Store, Info, type LucideIcon } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Shine } from '@/components/shared/interactive';
+import { primaryLinkClass } from '@/lib/ui-classes';
 import { useCartStore } from '@/lib/cart';
 import { useAuthStore } from '@/lib/auth';
 import api from '@/lib/api';
@@ -17,15 +20,18 @@ const STEPS = [
   { id: 'confirm', label: 'Підтвердження', icon: CheckCircle },
 ];
 
-const DELIVERY_METHODS = [
-  { value: 'NOVA_POSHTA_BRANCH', label: 'Нова Пошта — відділення' },
-  { value: 'NOVA_POSHTA_COURIER', label: "Нова Пошта — кур'єр" },
-  { value: 'PICKUP', label: 'Самовивіз' },
+const DELIVERY_METHODS: { value: string; label: string; desc?: string; icon: LucideIcon }[] = [
+  { value: 'NOVA_POSHTA_BRANCH', label: 'Нова Пошта — відділення', desc: 'Отримання у відділенні або поштоматі', icon: Building2 },
+  { value: 'NOVA_POSHTA_COURIER', label: "Нова Пошта — кур'єр", desc: 'Доставка до дверей', icon: Home },
+  { value: 'PICKUP', label: 'Самовивіз', icon: Store },
 ];
 
-const PAYMENT_METHODS = [
-  { value: 'CARD_ONLINE', label: 'Оплата карткою онлайн', desc: 'Visa / MasterCard через захищений платіжний сервіс' },
+const PAYMENT_METHODS: { value: string; label: string; desc?: string; icon: LucideIcon }[] = [
+  { value: 'CARD_ONLINE', label: 'Оплата карткою онлайн', desc: 'Visa / MasterCard через захищений платіжний сервіс', icon: CreditCard },
 ];
+
+/** Поле для вводу в стилі сайту */
+const fieldClass = 'w-full rounded-xl border border-dark/5 bg-dark-50 text-sm text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none';
 
 type FormData = {
   firstName: string; lastName: string; phone: string; email: string;
@@ -217,8 +223,8 @@ export default function CheckoutPage() {
 
   return (
     <main className="mx-auto max-w-5xl px-6 py-12 lg:px-8">
-      <Link href="/cart" className="mb-8 inline-flex items-center gap-2 text-sm text-dark-400 hover:text-dark transition">
-        <ArrowLeft className="h-4 w-4" /> Назад до кошика
+      <Link href="/cart" className="group mb-8 inline-flex items-center gap-2 text-sm font-medium text-dark-400 transition-colors hover:text-dark">
+        <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" /> Назад до кошика
       </Link>
 
       {/* Step indicator */}
@@ -228,14 +234,43 @@ export default function CheckoutPage() {
           const active = i === step;
           const done = i < step;
           return (
-            <div key={s.id} className="flex flex-1 items-center">
-              <div className={`flex items-center gap-2 ${active || done ? 'text-dark' : 'text-dark-300'}`}>
-                <div className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-bold transition-colors ${active || done ? 'bg-dark text-white' : 'bg-dark-100'}`}>
-                  {done ? '✓' : <Icon className="h-4 w-4" />}
+            <div key={s.id} className={`flex items-center ${i < STEPS.length - 1 ? 'flex-1' : ''}`}>
+              <div className={`flex items-center gap-2 transition-colors duration-300 ${active || done ? 'text-dark' : 'text-dark-300'}`}>
+                <div className="relative">
+                  {active && (
+                    <motion.span
+                      layoutId="checkout-step-ring"
+                      className="absolute -inset-1.5 rounded-full border-2 border-dark/15"
+                      transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+                    />
+                  )}
+                  <div className={`flex h-10 w-10 items-center justify-center rounded-full transition-all duration-300 ${active || done ? 'bg-dark text-white shadow-[0_8px_20px_rgba(22,24,28,0.2)]' : 'bg-dark-100'}`}>
+                    <AnimatePresence mode="wait" initial={false}>
+                      <motion.span
+                        key={done ? 'done' : 'icon'}
+                        initial={{ scale: 0.4, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.4, opacity: 0 }}
+                        transition={{ type: 'spring', stiffness: 400, damping: 20 }}
+                        className="flex"
+                      >
+                        {done ? <Check className="h-4 w-4" /> : <Icon className="h-4 w-4" />}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
                 </div>
                 <span className="hidden text-sm font-medium sm:block">{s.label}</span>
               </div>
-              {i < STEPS.length - 1 && <div className={`mx-3 flex-1 h-0.5 ${i < step ? 'bg-dark' : 'bg-dark-100'}`} />}
+              {i < STEPS.length - 1 && (
+                <div className="mx-3 h-0.5 flex-1 overflow-hidden rounded-full bg-dark-100">
+                  <motion.div
+                    className="h-full bg-dark"
+                    initial={false}
+                    animate={{ width: i < step ? '100%' : '0%' }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                  />
+                </div>
+              )}
             </div>
           );
         })}
@@ -243,7 +278,15 @@ export default function CheckoutPage() {
 
       <div className="grid gap-8 lg:grid-cols-3">
         <div className="lg:col-span-2">
-          <div className="rounded-xl bg-white p-8 shadow-sm border border-dark/10">
+          <div className="overflow-hidden rounded-3xl border border-dark/10 bg-white p-5 sm:p-8">
+            <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={currentStepId}
+              initial={{ opacity: 0, x: 24 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -24 }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+            >
 
             {/* Step 0 — Contact */}
             {currentStepId === 'contact' && (
@@ -264,10 +307,13 @@ export default function CheckoutPage() {
                 <h2 className="text-2xl font-semibold text-dark">Доставка</h2>
                 <div className="grid gap-3">
                   {DELIVERY_METHODS.map(m => (
-                    <label key={m.value} className={`flex cursor-pointer items-center gap-4 rounded-lg border p-4 transition ${form.deliveryMethod === m.value ? 'border-dark bg-dark-50' : 'border-dark/10 hover:border-dark/20'}`}>
-                      <input type="radio" name="delivery" value={m.value} checked={form.deliveryMethod === m.value} onChange={() => { setF('deliveryMethod', m.value); setF('city', ''); setF('cityRef', ''); setF('branch', ''); setF('branchRef', ''); }} className="accent-primary" />
-                      <span className="font-medium text-dark">{m.label}</span>
-                    </label>
+                    <OptionTile
+                      key={m.value}
+                      name="delivery"
+                      option={m}
+                      checked={form.deliveryMethod === m.value}
+                      onSelect={() => { setF('deliveryMethod', m.value); setF('city', ''); setF('cityRef', ''); setF('branch', ''); setF('branchRef', ''); }}
+                    />
                   ))}
                 </div>
 
@@ -283,11 +329,11 @@ export default function CheckoutPage() {
                           onChange={e => { setCitySearch(e.target.value); setF('city', ''); setF('cityRef', ''); setCitiesOpen(true); }}
                           onFocus={() => { if (!form.cityRef) setCitiesOpen(true); }}
                           placeholder="Пошук міста..."
-                          className="w-full rounded-lg border border-dark/10 bg-white py-3 pl-10 pr-4 text-sm focus:border-dark/30 focus:outline-none"
+                          className={`${fieldClass} py-3 pl-10 pr-4`}
                         />
                       </div>
                       {citiesOpen && cities.length > 0 && (
-                        <div className="absolute z-20 mt-1 w-full rounded-lg border border-dark/10 bg-white shadow-xl">
+                        <div className="absolute z-20 mt-2 w-full overflow-hidden rounded-2xl border border-dark/10 bg-white/95 shadow-[0_18px_40px_rgba(13,27,42,0.12)] backdrop-blur">
                           {cities.slice(0, 8).map((c, i) => (
                             <button key={i} type="button"
                               onClick={() => { setF('city', c.mainDescription || c.name); setF('cityRef', c.ref); setCitySearch(''); setCitiesOpen(false); setBranches([]); setBranchSearch(''); setF('branch', ''); setF('branchRef', ''); }}
@@ -311,11 +357,11 @@ export default function CheckoutPage() {
                             onChange={e => { setBranchSearch(e.target.value); setF('branch', ''); setF('branchRef', ''); setBranchesOpen(true); }}
                             onFocus={() => { if (!form.branchRef) setBranchesOpen(true); }}
                             placeholder="Пошук або номер відділення..."
-                            className="w-full rounded-lg border border-dark/10 bg-white py-3 pl-10 pr-4 text-sm focus:border-dark/30 focus:outline-none"
+                            className={`${fieldClass} py-3 pl-10 pr-4`}
                           />
                         </div>
                         {branchesOpen && branches.length > 0 && (
-                          <div className="absolute z-20 mt-1 max-h-56 w-full overflow-y-auto rounded-lg border border-dark/10 bg-white shadow-xl">
+                          <div className="absolute z-20 mt-2 max-h-56 w-full overflow-y-auto rounded-2xl border border-dark/10 bg-white/95 shadow-[0_18px_40px_rgba(13,27,42,0.12)] backdrop-blur">
                             {branches.slice(0, 20).map((b, i) => (
                               <button key={i} type="button"
                                 onClick={() => { setF('branch', b.shortAddress || b.name); setF('branchRef', b.ref); setBranchSearch(''); setBranchesOpen(false); }}
@@ -337,7 +383,7 @@ export default function CheckoutPage() {
                 )}
 
                 {form.deliveryMethod === 'PICKUP' && (
-                  <div className="rounded-lg bg-dark-50 p-4 text-sm text-dark-500">
+                  <div className="rounded-2xl bg-dark-50 p-4 text-sm text-dark-500">
                     📍 Самовивіз: м. Хмільник, Вінницька обл. Уточніть час за телефоном.
                   </div>
                 )}
@@ -350,24 +396,25 @@ export default function CheckoutPage() {
                 <h2 className="text-2xl font-semibold text-dark">Спосіб оплати</h2>
                 <div className="grid gap-3">
                   {PAYMENT_METHODS.map(m => (
-                    <label key={m.value} className={`flex cursor-pointer items-center gap-4 rounded-lg border p-4 transition ${form.paymentMethod === m.value ? 'border-dark bg-dark-50' : 'border-dark/10 hover:border-dark/20'}`}>
-                      <input type="radio" name="payment" value={m.value} checked={form.paymentMethod === m.value} onChange={() => setF('paymentMethod', m.value)} className="accent-primary" />
-                      <div>
-                        <p className="font-medium text-dark">{m.label}</p>
-                        <p className="text-xs text-dark-400 mt-0.5">{m.desc}</p>
-                      </div>
-                    </label>
+                    <OptionTile
+                      key={m.value}
+                      name="payment"
+                      option={m}
+                      checked={form.paymentMethod === m.value}
+                      onSelect={() => setF('paymentMethod', m.value)}
+                    />
                   ))}
                 </div>
 
-                <div className="rounded-lg bg-amber-50 border border-amber-200 p-4 text-sm text-amber-800">
-                  ℹ️ Доставка здійснюється виключно за 100% передплатою. Замовлення відправляємо після підтвердження оплати.
+                <div className="flex gap-3 rounded-2xl border border-orange-200/60 bg-orange-50/60 p-4 text-sm text-dark-600">
+                  <Info className="mt-0.5 h-4 w-4 shrink-0 text-orange-500" />
+                  Доставка здійснюється виключно за 100% передплатою. Замовлення відправляємо після підтвердження оплати.
                 </div>
 
                 <div>
                   <label className="mb-1.5 block text-sm font-medium text-dark-600">Коментар до замовлення</label>
                   <textarea value={form.comment} onChange={e => setF('comment', e.target.value)} rows={3} placeholder="Побажання до замовлення..."
-                    className="w-full rounded-lg border border-dark/10 bg-white px-4 py-3 text-sm focus:border-dark/30 focus:outline-none resize-none" />
+                    className={`${fieldClass} resize-none px-4 py-3`} />
                 </div>
               </div>
             )}
@@ -376,7 +423,7 @@ export default function CheckoutPage() {
             {currentStepId === 'confirm' && (
               <div className="space-y-6">
                 <h2 className="text-2xl font-semibold text-dark">Підтвердження замовлення</h2>
-                <div className="space-y-3 rounded-lg bg-dark-50 p-5 text-sm">
+                <div className="space-y-3 rounded-2xl bg-dark-50 p-5 text-sm">
                   <SummaryRow label="Ім'я" value={`${form.firstName} ${form.lastName}`} />
                   <SummaryRow label="Телефон" value={form.phone} />
                   <SummaryRow label="Email" value={form.email} />
@@ -395,24 +442,48 @@ export default function CheckoutPage() {
               </div>
             )}
 
-            {error && <p className="mt-4 rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p>}
+            </motion.div>
+            </AnimatePresence>
+
+            <AnimatePresence>
+              {error && (
+                <motion.p
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0, x: [0, -6, 6, -3, 0] }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.35 }}
+                  className="mt-4 rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600"
+                >
+                  {error}
+                </motion.p>
+              )}
+            </AnimatePresence>
 
             <div className={`mt-8 flex ${step > 0 ? 'justify-between' : 'justify-end'}`}>
               {step > 0 && (
                 <button onClick={() => { setStep(s => s - 1); setError(''); }}
-                  className="rounded-lg border border-dark/10 px-6 py-3 text-sm font-semibold text-dark-500 transition hover:border-dark/20 hover:bg-dark-50">
-                  ← Назад
+                  className="group flex min-h-[48px] items-center gap-2 rounded-xl border border-dark/10 px-5 text-sm font-medium text-dark-500 transition-all duration-300 hover:border-dark/20 hover:bg-dark-50 hover:text-dark active:scale-[0.98]">
+                  <ArrowLeft className="h-4 w-4 transition-transform duration-300 group-hover:-translate-x-1" /> Назад
                 </button>
               )}
               {step < STEPS.length - 1 ? (
-                <button onClick={handleNext}
-                  className="flex items-center gap-2 rounded-lg bg-dark px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-dark-700 active:scale-[0.98]">
-                  Далі <ChevronRight className="h-4 w-4" />
+                <button onClick={handleNext} className={`${primaryLinkClass} min-h-[48px] px-8`}>
+                  <Shine />
+                  <span className="relative flex items-center gap-2">
+                    Далі <ChevronRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  </span>
                 </button>
               ) : (
                 <button onClick={handleSubmit} disabled={loading}
-                  className="flex items-center gap-2 rounded-lg bg-dark px-8 py-3 text-sm font-medium text-white transition-colors hover:bg-dark-700 active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed">
-                  {loading ? 'Оформлення...' : 'Оформити замовлення ✓'}
+                  className={`${primaryLinkClass} min-h-[48px] px-8 disabled:cursor-wait disabled:opacity-70`}>
+                  {!loading && <Shine />}
+                  <span className="relative flex items-center gap-2">
+                    {loading ? (
+                      <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> Оформлення...</>
+                    ) : (
+                      <>Оформити замовлення <Check className="h-4 w-4" /></>
+                    )}
+                  </span>
                 </button>
               )}
             </div>
@@ -421,7 +492,7 @@ export default function CheckoutPage() {
 
         {/* Order summary sidebar */}
         <div className="lg:col-span-1">
-          <div className="lg:sticky lg:top-24 rounded-xl bg-white p-6 shadow-sm border border-dark/10 space-y-5">
+          <div className="lg:sticky lg:top-24 space-y-5 rounded-3xl border border-dark/10 bg-white p-6 shadow-[0_18px_40px_rgba(13,27,42,0.06)]">
             <h3 className="font-semibold text-dark">Ваше замовлення</h3>
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {items.map(item => (
@@ -481,8 +552,45 @@ function InputField({ label, value, onChange, placeholder, type = 'text' }: { la
     <div>
       <label className="mb-1.5 block text-sm font-medium text-dark-600">{label}</label>
       <input type={type} value={value} onChange={e => onChange(e.target.value)} placeholder={placeholder}
-        className="w-full rounded-lg border border-dark/10 bg-white px-4 py-3 text-sm focus:border-dark/30 focus:outline-none" />
+        className={`${fieldClass} px-4 py-3`} />
     </div>
+  );
+}
+
+/** Плитка вибору (доставка / оплата) з анімованою радіо-позначкою */
+function OptionTile({ name, option, checked, onSelect }: {
+  name: string;
+  option: { value: string; label: string; desc?: string; icon: LucideIcon };
+  checked: boolean;
+  onSelect: () => void;
+}) {
+  const Icon = option.icon;
+  return (
+    <label className={`group flex min-h-[64px] cursor-pointer items-center gap-4 rounded-2xl border p-4 transition-all duration-300 ${
+      checked
+        ? 'border-dark/20 bg-white shadow-[0_12px_30px_rgba(13,27,42,0.08)]'
+        : 'border-dark/5 bg-dark-50 hover:-translate-y-0.5 hover:border-dark/10 hover:bg-white'
+    }`}>
+      <input type="radio" name={name} value={option.value} checked={checked} onChange={onSelect} className="sr-only" />
+      <span className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+        checked ? 'bg-primary text-white' : 'bg-white text-primary-500 shadow-sm group-hover:scale-105'
+      }`}>
+        <Icon className="h-5 w-5" />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-medium text-dark">{option.label}</span>
+        {option.desc && <span className="mt-0.5 block text-xs text-dark-400">{option.desc}</span>}
+      </span>
+      <span className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors duration-300 ${checked ? 'border-dark bg-dark' : 'border-dark-200'}`}>
+        <AnimatePresence>
+          {checked && (
+            <motion.span initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }} transition={{ type: 'spring', stiffness: 500, damping: 25 }}>
+              <Check className="h-3.5 w-3.5 text-white" />
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </span>
+    </label>
   );
 }
 

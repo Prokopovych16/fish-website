@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { ArrowRight, Flame, Truck, Leaf } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { CountUp } from '../shared/interactive';
+import { iconChipDarkClass } from '../../lib/ui-classes';
 
 const features = [
   { title: 'Тільки тирса', description: 'Копчення виключно на дровах і тирсі — ніякого рідкого диму чи ароматизаторів.', icon: Flame },
@@ -22,8 +24,11 @@ const container = {
 
 export function HeroSection() {
   return (
-    <section className="bg-dark text-white">
-      <div className="mx-auto flex max-w-7xl flex-col gap-16 px-6 py-24 lg:flex-row lg:items-center lg:justify-between lg:px-8 lg:py-32">
+    <section className="relative overflow-hidden bg-dark text-white">
+      {/* М'які декоративні кола */}
+      <div className="pointer-events-none absolute -left-32 top-10 h-96 w-96 rounded-full bg-primary-500/25 blur-3xl" />
+      <div className="pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-sage/15 blur-3xl" />
+      <div className="relative mx-auto flex max-w-7xl flex-col gap-16 px-6 py-24 lg:flex-row lg:items-center lg:justify-between lg:px-8 lg:py-32">
         <motion.div className="max-w-xl" variants={container} initial="hidden" animate="visible">
           <motion.p variants={fadeUp} className="text-xs font-medium uppercase tracking-[0.2em] text-white/50">
             Валігура · з 2004 року · Хмільник
@@ -41,14 +46,17 @@ export function HeroSection() {
           <motion.div variants={fadeUp} className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center">
             <Link
               href="/catalog"
-              className="flex items-center justify-center gap-2 rounded-lg bg-white px-6 py-3 text-sm font-medium text-dark transition-colors hover:bg-white/90"
+              className="group relative flex min-h-[48px] items-center justify-center gap-2 overflow-hidden rounded-xl bg-white px-6 text-sm font-semibold text-dark shadow-[0_10px_30px_rgba(255,255,255,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(255,255,255,0.2)] active:scale-[0.98]"
             >
-              В каталог
-              <ArrowRight size={16} />
+              <span className="pointer-events-none absolute inset-y-0 -left-1/2 w-1/3 -skew-x-12 bg-dark/10 transition-all duration-700 group-hover:left-[120%]" />
+              <span className="relative flex items-center gap-2">
+                В каталог
+                <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </span>
             </Link>
             <Link
               href="/about"
-              className="flex items-center justify-center gap-2 rounded-lg border border-white/20 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10"
+              className="flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-white/20 px-6 text-sm font-medium text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 active:scale-[0.98]"
             >
               Наша історія
             </Link>
@@ -56,12 +64,12 @@ export function HeroSection() {
 
           <motion.div variants={fadeUp} className="mt-16 grid grid-cols-3 gap-8 border-t border-white/10 pt-8">
             {[
-              { number: '20+', text: 'років на ринку' },
-              { number: '100%', text: 'натуральний продукт' },
+              { number: <CountUp to={20} suffix="+" />, text: 'років на ринку' },
+              { number: <CountUp to={100} suffix="%" />, text: 'натуральний продукт' },
               { number: '🇺🇦', text: 'доставка по Україні' },
             ].map((stat) => (
               <div key={stat.text}>
-                <p className="text-2xl font-semibold">{stat.number}</p>
+                <p className="text-2xl font-semibold tabular-nums">{stat.number}</p>
                 <p className="mt-1 text-xs text-white/50">{stat.text}</p>
               </div>
             ))}
@@ -75,14 +83,14 @@ export function HeroSection() {
           animate="visible"
           className="hidden max-w-sm lg:block"
         >
-          <div className="rounded-xl border border-white/10 bg-white/5 p-8">
-            <p className="text-xs font-medium uppercase tracking-wide text-white/50">Чим ми відрізняємось</p>
-            <div className="mt-6 space-y-5">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-md">
+            <p className="px-4 pt-4 text-xs font-medium uppercase tracking-wide text-white/50">Чим ми відрізняємось</p>
+            <div className="mt-3 space-y-1">
               {features.map((feature) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.title} className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-white/10 text-white/80">
+                  <div key={feature.title} className="group flex items-start gap-4 rounded-2xl p-4 transition-colors duration-300 hover:bg-white/5">
+                    <div className={iconChipDarkClass}>
                       <Icon size={18} />
                     </div>
                     <div>

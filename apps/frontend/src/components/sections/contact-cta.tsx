@@ -29,9 +29,9 @@ export function ContactCTA() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1, duration: 0.5 }}
               viewport={{ once: true }}
-              className="flex flex-col items-center text-center"
+              className="group flex cursor-default flex-col items-center text-center"
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white/80">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-dark">
                 <Phone className="h-8 w-8" />
               </div>
               <h3 className="font-semibold mb-2">Телефон</h3>
@@ -48,9 +48,9 @@ export function ContactCTA() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
-              className="flex flex-col items-center text-center"
+              className="group flex cursor-default flex-col items-center text-center"
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white/80">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-dark">
                 <Mail className="h-8 w-8" />
               </div>
               <h3 className="font-semibold mb-2">Email</h3>
@@ -67,9 +67,9 @@ export function ContactCTA() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
               viewport={{ once: true }}
-              className="flex flex-col items-center text-center"
+              className="group flex cursor-default flex-col items-center text-center"
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white/80">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-dark">
                 <MapPin className="h-8 w-8" />
               </div>
               <h3 className="font-semibold mb-2">Адреса</h3>
@@ -84,9 +84,9 @@ export function ContactCTA() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.5 }}
               viewport={{ once: true }}
-              className="flex flex-col items-center text-center"
+              className="group flex cursor-default flex-col items-center text-center"
             >
-              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-white/10 text-white/80">
+              <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10 text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:bg-white group-hover:text-dark">
                 <MessageCircle className="h-8 w-8" />
               </div>
               <h3 className="font-semibold mb-2">Контакти</h3>
@@ -106,10 +106,10 @@ export function ContactCTA() {
             viewport={{ once: true }}
             className="flex flex-col gap-4 sm:flex-row sm:justify-center"
           >
-            <Link href="/contact" className="inline-flex items-center justify-center rounded-lg bg-white px-6 py-3 text-sm font-medium text-dark transition-colors hover:bg-white/90">
+            <Link href="/contact" className="inline-flex min-h-[48px] items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-dark shadow-[0_10px_30px_rgba(255,255,255,0.12)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_40px_rgba(255,255,255,0.2)] active:scale-[0.98]">
               Зв'язатися з нами
             </Link>
-            <Link href="/catalog" className="inline-flex items-center justify-center rounded-lg border border-white/20 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-white/10">
+            <Link href="/catalog" className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-white/20 px-6 text-sm font-medium text-white transition-all duration-300 hover:border-white/40 hover:bg-white/10 active:scale-[0.98]">
               Переглянути каталог
             </Link>
           </motion.div>

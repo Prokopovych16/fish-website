@@ -9,7 +9,7 @@ export default function CatalogLoading() {
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="overflow-hidden rounded-xl border border-dark/10 bg-white">
-            <div className="h-52 animate-pulse bg-dark-100" />
+            <div className="aspect-[4/5] animate-pulse bg-dark-100" />
             <div className="p-4 space-y-3">
               <div className="h-4 w-3/4 animate-pulse rounded-xl bg-dark-100" />
               <div className="h-4 w-1/2 animate-pulse rounded-xl bg-dark-100" />

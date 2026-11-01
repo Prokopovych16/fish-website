@@ -67,7 +67,7 @@ export default function ReviewsPage() {
       {loading ? (
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="animate-pulse rounded-xl bg-white p-8 border border-dark/10">
+            <div key={i} className="animate-pulse rounded-3xl border border-dark/10 bg-white p-8">
               <div className="mb-4 flex gap-1">
                 {[1, 2, 3, 4, 5].map(j => (
                   <div key={j} className="h-4 w-4 rounded-full bg-dark-100" />
@@ -80,7 +80,7 @@ export default function ReviewsPage() {
           ))}
         </div>
       ) : reviews.length === 0 ? (
-        <div className="rounded-xl border border-dark/10 bg-white p-16 text-center">
+        <div className="rounded-3xl border border-dark/10 bg-white p-16 text-center">
           <MessageCircle className="mx-auto mb-4 h-16 w-16 text-dark-200" />
           <p className="text-xl font-medium text-dark">Відгуків ще немає</p>
           <p className="mt-2 text-dark-500">Станьте першим, хто залишить відгук!</p>
@@ -93,10 +93,11 @@ export default function ReviewsPage() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: Math.min(index * 0.05, 0.3), duration: 0.4 }}
-              className="group relative rounded-xl bg-white p-8 border border-dark/10 transition-shadow hover:shadow-md"
+              className="h-full pt-4"
             >
+              <div className="group relative h-full rounded-3xl border border-dark/10 bg-white p-8 transition-all duration-300 hover:-translate-y-1 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]">
               <div className="absolute -top-4 left-8">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark text-white shadow-[0_8px_20px_rgba(22,24,28,0.2)] transition-transform duration-300 group-hover:-rotate-12 group-hover:scale-110">
                   <Quote className="h-5 w-5" />
                 </div>
               </div>
@@ -160,6 +161,7 @@ export default function ReviewsPage() {
               <p className="mt-3 text-xs text-dark-400">
                 {new Date(review.createdAt).toLocaleDateString('uk-UA', { year: 'numeric', month: 'long', day: 'numeric' })}
               </p>
+              </div>
             </motion.div>
           ))}
         </div>

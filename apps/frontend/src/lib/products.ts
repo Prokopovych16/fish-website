@@ -19,6 +19,16 @@ export interface ProductItem {
   tags?: string[];
   origin?: string;
   weight?: number;
+  unit: string;
+  catchMethod?: string;
+  storageConditions?: string;
+  expiryDays?: number;
+  composition?: string;
+  // Харчова цінність на 100 г
+  calories?: number;
+  proteins?: number;
+  fats?: number;
+  carbs?: number;
   seoTitle?: string;
   seoDescription?: string;
 }
@@ -59,6 +69,7 @@ const fallbackProducts: ProductItem[] = [
     rating: 4.9,
     reviewsCount: 42,
     stock: 24,
+    unit: 'кг',
     badge: 'Хіт продажів',
     isHaccp: true,
     image: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80',
@@ -82,6 +93,7 @@ const fallbackProducts: ProductItem[] = [
     rating: 4.8,
     reviewsCount: 18,
     stock: 12,
+    unit: 'кг',
     badge: 'Новинка',
     isHaccp: true,
     image: 'https://images.unsplash.com/photo-1505253211202-48adfd4ec0c0?auto=format&fit=crop&w=1200&q=80',
@@ -103,6 +115,7 @@ const fallbackProducts: ProductItem[] = [
     rating: 4.7,
     reviewsCount: 36,
     stock: 8,
+    unit: 'кг',
     badge: 'Акція',
     isHaccp: true,
     image: 'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=1200&q=80',
@@ -240,6 +253,15 @@ export async function getNewProducts(limit = 6): Promise<ProductItem[]> {
 }
 
 /**
+ * Decimal-поля Prisma приходять рядками ("0.5") — перетворюємо в число, null/порожнє → undefined
+ */
+function toNumber(value: unknown): number | undefined {
+  if (value === null || value === undefined || value === '') return undefined;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : undefined;
+}
+
+/**
  * Нормалізація даних товару з API
  */
 function normalizeProduct(item: any): ProductItem {
@@ -266,8 +288,17 @@ function normalizeProduct(item: any): ProductItem {
     category: item.category?.name || item.category || 'Риба',
     categoryId: item.category?.id || item.categoryId,
     tags: item.tags?.map((t: any) => t.name || t) || [],
-    origin: item.origin,
-    weight: item.weight,
+    origin: item.origin ?? undefined,
+    weight: toNumber(item.weight),
+    unit: item.unit || 'кг',
+    catchMethod: item.catchMethod ?? undefined,
+    storageConditions: item.storageConditions ?? undefined,
+    expiryDays: toNumber(item.expiryDays),
+    composition: item.composition ?? undefined,
+    calories: toNumber(item.calories),
+    proteins: toNumber(item.proteins),
+    fats: toNumber(item.fats),
+    carbs: toNumber(item.carbs),
     seoTitle: item.seoTitle ?? undefined,
     seoDescription: item.seoDescription ?? undefined,
   };

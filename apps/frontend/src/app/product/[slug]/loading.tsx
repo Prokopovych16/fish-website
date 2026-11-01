@@ -4,11 +4,12 @@ export default function ProductLoading() {
       <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="space-y-8">
           <div className="overflow-hidden rounded-xl border border-dark/10 bg-white p-6">
-            <div className="grid gap-4 md:grid-cols-[1.4fr_0.8fr]">
-              <div className="h-80 animate-pulse rounded-lg bg-dark-100" />
-              <div className="grid gap-4">
-                <div className="h-36 animate-pulse rounded-lg bg-dark-100" />
-                <div className="h-36 animate-pulse rounded-lg bg-dark-100" />
+            <div className="space-y-3">
+              <div className="aspect-square animate-pulse rounded-lg bg-dark-100 sm:aspect-[4/3]" />
+              <div className="flex gap-3 p-1">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <div key={i} className="h-16 w-16 shrink-0 animate-pulse rounded-lg bg-dark-100 sm:h-20 sm:w-20" />
+                ))}
               </div>
             </div>
           </div>

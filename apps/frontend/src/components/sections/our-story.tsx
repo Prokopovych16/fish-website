@@ -55,10 +55,11 @@ export function OurStory() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.06, duration: 0.4 }}
                 viewport={{ once: true }}
-                className="relative rounded-lg border border-dark/10 bg-white p-8 text-center transition-shadow hover:shadow-md"
+                whileHover={{ y: -4 }}
+                className="group relative rounded-3xl border border-dark/10 bg-white p-8 text-center transition-[border-color,box-shadow] duration-300 hover:border-dark/15 hover:shadow-[0_18px_40px_rgba(13,27,42,0.10)]"
               >
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark text-white">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-dark text-white transition-transform duration-300 group-hover:scale-110">
                     <Icon className="h-5 w-5" />
                   </div>
                 </div>

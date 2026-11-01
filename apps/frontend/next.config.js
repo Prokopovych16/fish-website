@@ -8,8 +8,8 @@ const nextConfig = {
   images: {
     remotePatterns: [
       { protocol: 'http', hostname: 'localhost' },
-      { protocol: 'https', hostname: 'fish-shop.ua' },
-      { protocol: 'https', hostname: '*.fish-shop.ua' },
+      { protocol: 'https', hostname: 'valigura-fish.com' },
+      { protocol: 'https', hostname: 'www.valigura-fish.com' },
       { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },

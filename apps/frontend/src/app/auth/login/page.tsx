@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Eye, EyeOff, Mail, Lock, Send } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Send, Fish } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/lib/auth';
 import api from '@/lib/api';
@@ -54,11 +54,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-surface px-4">
+      <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full bg-primary-200/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-32 -right-24 h-96 w-96 rounded-full bg-sage-100/70 blur-3xl" />
+      <div className="relative w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
-          <Link href="/" className="text-lg font-semibold tracking-tight text-dark">
+          <Link href="/" className="group inline-flex items-center gap-2 text-lg font-semibold tracking-tight text-dark">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-dark text-white transition-transform duration-300 group-hover:-rotate-12"><Fish size={18} /></span>
             Валігура
           </Link>
           <h1 className="mt-6 text-3xl font-semibold text-dark">Вхід в акаунт</h1>
@@ -66,10 +69,10 @@ export default function LoginPage() {
         </div>
 
         {/* Form */}
-        <div className="bg-white rounded-xl border border-dark/10 p-8">
+        <div className="rounded-3xl border border-dark/10 bg-white/90 p-6 shadow-[0_30px_90px_rgba(13,27,42,0.08)] backdrop-blur sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {error && (
-              <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+              <div className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                 <p>{error}</p>
                 {needsVerification && (
                   <div className="mt-3 border-t border-red-200 pt-3">
@@ -104,11 +107,11 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 border border-dark/10 rounded-lg focus:border-dark/30 focus:outline-none transition-colors"
+                  className="peer w-full pl-12 pr-4 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                   placeholder="your@email.com"
                   required
                 />
-                <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-400 h-5 w-5" />
+                <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-dark-400 transition-colors duration-300 peer-focus:text-dark" />
               </div>
             </div>
 
@@ -123,15 +126,15 @@ export default function LoginPage() {
                   type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-12 pr-12 py-3 border border-dark/10 rounded-lg focus:border-dark/30 focus:outline-none transition-colors"
+                  className="peer w-full pl-12 pr-12 py-3 rounded-xl border border-dark/5 bg-dark-50 text-dark transition-all duration-300 placeholder:text-dark-400 hover:border-dark/10 focus:border-dark/20 focus:bg-white focus:shadow-[0_8px_24px_rgba(13,27,42,0.06)] focus:outline-none"
                   placeholder="Введіть пароль"
                   required
                 />
-                <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-dark-400 h-5 w-5" />
+                <Lock className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-dark-400 transition-colors duration-300 peer-focus:text-dark" />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-dark-400 hover:text-dark-500"
+                  className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-lg text-dark-400 transition-all hover:bg-white hover:text-dark"
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                 </button>

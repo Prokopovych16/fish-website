@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Fish } from 'lucide-react';
+import { ArrowUpRight, Fish } from 'lucide-react';
+import { Reveal } from '../shared/interactive';
+import { tileClass } from '../../lib/ui-classes';
 import { getCategories } from '../../lib/products';
 
 export async function CategoriesSection() {
@@ -17,13 +19,14 @@ export async function CategoriesSection() {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        {topLevel.map((category) => (
+        {topLevel.map((category, i) => (
+          <Reveal key={category.id} index={i}>
           <Link
-            key={category.id}
             href={`/catalog?category=${category.slug}`}
-            className="group flex flex-col items-center gap-3 rounded-xl border border-dark/10 bg-white p-5 text-center shadow-sm transition-shadow hover:shadow-md"
+            className={`${tileClass} relative flex flex-col items-center gap-3 p-5 text-center`}
           >
-            <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-lg bg-dark-50 text-3xl">
+            <ArrowUpRight className="absolute right-3 top-3 h-4 w-4 text-dark-300 opacity-0 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-dark group-hover:opacity-100" />
+            <div className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white text-3xl shadow-sm transition-transform duration-300 group-hover:scale-110">
               {category.image ? (
                 <Image src={category.image} alt={category.name} fill sizes="64px" className="object-cover" />
               ) : category.icon ? (
@@ -36,6 +39,7 @@ export async function CategoriesSection() {
               {category.name}
             </span>
           </Link>
+          </Reveal>
         ))}
       </div>
     </section>

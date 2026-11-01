@@ -135,7 +135,7 @@ function SuccessContent() {
             <button
               onClick={handleRetryPayment}
               disabled={retrying}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-dark px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-dark-700 disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-dark px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-dark-700 disabled:opacity-60 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]"
             >
               <RefreshCw className={`h-4 w-4 ${retrying ? 'animate-spin' : ''}`} />
               {retrying ? 'Перенаправлення...' : isPendingPayment ? 'Оплатити замовлення' : 'Спробувати оплатити знову'}
@@ -147,7 +147,7 @@ function SuccessContent() {
         )}
 
         {!needsPayment && (
-          <div className="rounded-xl bg-white p-6 border border-dark/10 space-y-3 text-sm text-left">
+          <div className="rounded-3xl border border-dark/10 bg-white p-6 space-y-3 text-sm text-left">
             <div className="flex items-start gap-3">
               <Package className="h-5 w-5 text-dark-400 mt-0.5 shrink-0" />
               <p className="text-dark-500">Підтвердження замовлення та деталі доставки надійдуть на вашу пошту.</p>
@@ -161,7 +161,7 @@ function SuccessContent() {
 
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
           <Link href="/account/orders"
-            className="flex items-center justify-center gap-2 rounded-lg bg-dark px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-dark-700">
+            className="flex items-center justify-center gap-2 rounded-xl bg-dark px-6 py-3 text-sm font-medium text-white transition-all duration-300 hover:bg-dark-700 min-h-[44px] hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(22,24,28,0.2)] active:scale-[0.98]">
             Мої замовлення <ArrowRight className="h-4 w-4" />
           </Link>
           <Link href="/catalog"

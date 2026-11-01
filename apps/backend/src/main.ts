@@ -1,12 +1,20 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
+import { NestExpressApplication } from '@nestjs/platform-express';
+import * as path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  // Роздача завантажених зображень: http://localhost:4000/uploads/<file>.webp
+  app.useStaticAssets(path.resolve(process.env.UPLOADS_DIR || './uploads'), {
+    prefix: '/uploads/',
+    maxAge: '30d',
+  });
 
   // Enable CORS - support multiple dev ports and production URL
   const allowedOrigins = process.env.NODE_ENV === 'production'

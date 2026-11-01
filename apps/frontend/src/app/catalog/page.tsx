@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { CatalogExplorer } from '../../components/catalog/catalog-explorer'
 import { getProductsPaginated, getCategories, type FilterOptions } from '../../lib/products'
+import { LiveDot } from '../../components/shared/interactive'
 
 export const revalidate = 60
 
@@ -57,7 +58,8 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
             Свіжа риба, морепродукти та делікатеси з HACCP-сертифікованого виробництва. Доставка по всій Україні.
           </p>
         </div>
-        <div className="inline-flex items-center gap-2 rounded-lg border border-dark/10 bg-white px-4 py-3 text-sm text-dark-500">
+        <div className="inline-flex items-center gap-2.5 rounded-full border border-dark/5 bg-dark-50 px-4 py-2.5 text-sm text-dark-500">
+          <LiveDot />
           <span className="font-semibold text-dark">{pagination.total}</span>
           товарів у каталозі
         </div>
@@ -81,7 +83,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
           {page > 1 && (
             <Link
               href={`/catalog?${new URLSearchParams({ ...sp, page: String(page - 1) })}`}
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-dark/10 text-dark-500 transition-colors hover:border-dark/20 hover:text-dark"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-dark/10 bg-white text-dark-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-dark/20 hover:text-dark hover:shadow-[0_8px_20px_rgba(13,27,42,0.08)]"
             >
               <ChevronLeft className="h-4 w-4" />
             </Link>
@@ -95,10 +97,10 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
                 )}
                 <Link
                   href={`/catalog?${new URLSearchParams({ ...sp, page: String(p) })}`}
-                  className={`flex h-10 w-10 items-center justify-center rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex h-11 w-11 items-center justify-center rounded-xl text-sm font-medium transition-all duration-300 ${
                     p === page
-                      ? 'bg-dark text-white'
-                      : 'border border-dark/10 bg-white text-dark-500 hover:bg-dark/5'
+                      ? 'bg-dark text-white shadow-[0_8px_20px_rgba(22,24,28,0.18)]'
+                      : 'border border-dark/10 bg-white text-dark-500 hover:-translate-y-0.5 hover:border-dark/20 hover:text-dark hover:shadow-[0_8px_20px_rgba(13,27,42,0.08)]'
                   }`}
                 >
                   {p}
@@ -108,7 +110,7 @@ export default async function CatalogPage({ searchParams }: CatalogPageProps) {
           {page < pagination.pages && (
             <Link
               href={`/catalog?${new URLSearchParams({ ...sp, page: String(page + 1) })}`}
-              className="flex h-10 w-10 items-center justify-center rounded-lg border border-dark/10 text-dark-500 transition-colors hover:border-dark/20 hover:text-dark"
+              className="flex h-11 w-11 items-center justify-center rounded-xl border border-dark/10 bg-white text-dark-500 transition-all duration-300 hover:-translate-y-0.5 hover:border-dark/20 hover:text-dark hover:shadow-[0_8px_20px_rgba(13,27,42,0.08)]"
             >
               <ChevronRight className="h-4 w-4" />
             </Link>

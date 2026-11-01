@@ -174,7 +174,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <aside className="space-y-8">
             {/* Related posts */}
             {related.filter((r: any) => r.slug !== post.slug).length > 0 && (
-              <div className="rounded-xl border border-dark/10 bg-white p-6 shadow-sm">
+              <div className="rounded-3xl border border-dark/10 bg-white p-6 shadow-sm">
                 <h3 className="mb-4 font-semibold text-dark">Інші публікації</h3>
                 <div className="space-y-4">
                   {related
@@ -206,7 +206,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             )}
 
             {/* CTA */}
-            <div className="rounded-xl bg-dark p-6 text-white">
+            <div className="relative overflow-hidden rounded-3xl bg-dark p-6 text-white">
               <h3 className="text-lg font-semibold">Спробуйте наші товари!</h3>
               <p className="mt-2 text-sm text-white/70">Свіжа риба та морепродукти з HACCP-сертифікованого виробництва.</p>
               <Link

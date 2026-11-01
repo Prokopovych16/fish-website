@@ -28,7 +28,7 @@ export function ContactHero() {
             transition={{ duration: 0.4, delay: 0.1 }}
             className="grid gap-4 sm:grid-cols-2"
           >
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10">
                   <Phone className="h-5 w-5" />
@@ -40,7 +40,7 @@ export function ContactHero() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10">
                   <Mail className="h-5 w-5" />
@@ -52,7 +52,7 @@ export function ContactHero() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10">
                   <MapPin className="h-5 w-5" />
@@ -64,7 +64,7 @@ export function ContactHero() {
               </div>
             </div>
 
-            <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 transition-all duration-300 hover:-translate-y-0.5 hover:border-white/20 hover:bg-white/10">
               <div className="flex items-center gap-4">
                 <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-white/10">
                   <Clock className="h-5 w-5" />
