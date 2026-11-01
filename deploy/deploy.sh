@@ -12,15 +12,17 @@ echo "=== [1/6] Отримуємо нові зміни ==="
 git pull origin main
 
 echo "=== [2/6] Встановлюємо залежності ==="
-npm install --workspaces
+npm install
 
-echo "=== [3/6] Збираємо бекенд ==="
-npm run build --workspace=apps/backend
-
-echo "=== [4/6] Мігруємо базу даних ==="
+echo "=== [3/6] Мігруємо базу даних і генеруємо Prisma Client ==="
+# Спочатку база і типи, потім збірка — інакше бекенд збереться зі старою схемою
 cd apps/backend
 npx prisma migrate deploy
+npx prisma generate
 cd $APP_DIR
+
+echo "=== [4/6] Збираємо бекенд ==="
+npm run build --workspace=apps/backend
 
 echo "=== [5/6] Збираємо фронтенд ==="
 # ВАЖЛИВО: .env.local або змінні середовища мають бути встановлені ДО збірки
